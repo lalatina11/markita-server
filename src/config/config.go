@@ -1,12 +1,14 @@
 package config
 
 type AppConfig struct {
-	Env    string
-	Server *ServerConfig
+	Env      string
+	Server   *ServerConfig
+	Supabase *SupabaseConfig
 }
 
 func NewAppConfig() *AppConfig {
 	Env := GetEnv("ENV")
 	Server := NewServerConfig()
-	return &AppConfig{Env, Server}
+	Supabase := NewSupabaseConfig()
+	return &AppConfig{Env, Server, Supabase}
 }
