@@ -1,4 +1,4 @@
-package lib
+package response
 
 import "github.com/gofiber/fiber/v3"
 
@@ -9,28 +9,37 @@ type ApiResponse[T any] struct {
 }
 
 // SuccessResponse sends a standard JSON success response.
-func SuccessResponse[T any](c fiber.Ctx, statusCode int, message string, data T) error {
+func SuccessResponse[T any](c fiber.Ctx, message *string, data T, statusCode int) error {
 	if statusCode == 0 {
 		statusCode = fiber.StatusOK
 	}
-	return c.Status(statusCode).JSON(ApiResponse[any]{
+
+	msg := "OK"
+	if message != nil && *message != "" {
+		msg = *message
+	}
+
+	return c.Status(statusCode).JSON(ApiResponse[T]{
 		Success: true,
-		Message: message,
+		Message: msg,
 		Data:    data,
 	})
 }
 
 // ErrorResponse sends a standard JSON error response.
-func ErrorResponse(c fiber.Ctx, statusCode int, message string) error {
+func ErrorResponse(c fiber.Ctx, message *string, statusCode int) error {
 	if statusCode == 0 {
 		statusCode = fiber.StatusInternalServerError
 	}
-	if message == "" {
-		message = "Internal Server Error"
+
+	msg := "Internal Server Error"
+	if message != nil && *message != "" {
+		msg = *message
 	}
+
 	return c.Status(statusCode).JSON(ApiResponse[any]{
 		Success: false,
-		Message: message,
+		Message: msg,
 		Data:    nil,
 	})
 }
