@@ -5,7 +5,7 @@ import "github.com/gofiber/fiber/v3"
 type ApiResponse[T any] struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
-	Data    T      `json:"data,omitempty"`
+	Data    T      `json:"data"`
 }
 
 // SuccessResponse sends a standard JSON success response.
