@@ -1,0 +1,9 @@
+.env
+.env.dev
+.env.development
+.env.stag
+.env.staging
+.env.prod
+.env.production
+
+tmp
