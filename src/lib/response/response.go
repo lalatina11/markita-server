@@ -9,9 +9,10 @@ type ApiResponse[T any] struct {
 }
 
 // SuccessResponse sends a standard JSON success response.
-func SuccessResponse[T any](c fiber.Ctx, message *string, data T, statusCode int) error {
-	if statusCode == 0 {
-		statusCode = fiber.StatusOK
+func SuccessResponse[T any](c fiber.Ctx, message *string, data T, statusCode *int) error {
+	code := 200
+	if statusCode != nil && *statusCode != 0 {
+		code = *statusCode
 	}
 
 	msg := "OK"
@@ -19,7 +20,7 @@ func SuccessResponse[T any](c fiber.Ctx, message *string, data T, statusCode int
 		msg = *message
 	}
 
-	return c.Status(statusCode).JSON(ApiResponse[T]{
+	return c.Status(code).JSON(ApiResponse[T]{
 		Success: true,
 		Message: msg,
 		Data:    data,
@@ -27,17 +28,17 @@ func SuccessResponse[T any](c fiber.Ctx, message *string, data T, statusCode int
 }
 
 // ErrorResponse sends a standard JSON error response.
-func ErrorResponse(c fiber.Ctx, message *string, statusCode int) error {
-	if statusCode == 0 {
-		statusCode = fiber.StatusInternalServerError
+func ErrorResponse(c fiber.Ctx, message *string, statusCode *int) error {
+	code := 200
+	if statusCode != nil && *statusCode != 0 {
+		code = *statusCode
 	}
-
 	msg := "Internal Server Error"
 	if message != nil && *message != "" {
 		msg = *message
 	}
 
-	return c.Status(statusCode).JSON(ApiResponse[any]{
+	return c.Status(code).JSON(ApiResponse[any]{
 		Success: false,
 		Message: msg,
 		Data:    nil,

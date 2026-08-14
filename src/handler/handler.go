@@ -12,5 +12,5 @@ func NewAppHandler() *AppHandler {
 }
 
 func (a *AppHandler) Root(c fiber.Ctx) error {
-	return response.SuccessResponse[any](c, nil, nil, fiber.StatusOK)
+	return response.SuccessResponse[any](c, nil, nil, nil)
 }
