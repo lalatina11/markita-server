@@ -14,7 +14,7 @@ func NewServiceError() *ServiceError {
 	return &ServiceError{Code: 500, Msg: "Internal Server Error"}
 }
 
-func CreateServiceError(Code int, Msg string) *ServiceError {
+func Create(Code int, Msg string) *ServiceError {
 	return &ServiceError{Code, Msg}
 }
 

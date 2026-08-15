@@ -31,7 +31,7 @@ func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.Aut
 
 	var errorResult response.AuthErrorResult
 	if err := json.Unmarshal([]byte(stringBody), &errorResult); err == nil && errorResult.Msg != "" {
-		return nil, service_error.CreateServiceError(errorResult.Code, errorResult.Msg)
+		return nil, service_error.Create(errorResult.Code, errorResult.Msg)
 	}
 
 	return nil, service_error.NewServiceError()
