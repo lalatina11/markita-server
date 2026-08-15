@@ -29,7 +29,7 @@ func SuccessResponse[T any](c fiber.Ctx, message *string, data T, statusCode *in
 
 // ErrorResponse sends a standard JSON error response.
 func ErrorResponse(c fiber.Ctx, message *string, statusCode *int) error {
-	code := 200
+	code := 500
 	if statusCode != nil && *statusCode != 0 {
 		code = *statusCode
 	}
