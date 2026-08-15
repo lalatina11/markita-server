@@ -31,7 +31,7 @@ func ErrorHandler() fiber.Handler {
 func NotFoundHandler() fiber.Handler {
 	return func(c fiber.Ctx) error {
 		status := 404
-		msg := "Internal server error"
+		msg := "Not Found Route!"
 		return response.ErrorResponse(c, &msg, &status)
 	}
 }
