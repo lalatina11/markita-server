@@ -1,7 +1,7 @@
 package response
 
 // AuthResult represents the complete authentication response
-type AuthResult struct {
+type AuthSuccessResult struct {
 	AccessToken  string `json:"access_token"`
 	TokenType    string `json:"token_type"`
 	ExpiresIn    int    `json:"expires_in"`
@@ -66,7 +66,7 @@ type TokenResponse struct {
 }
 
 // AuthRequest represents login credentials
-type AuthRequest struct {
+type SignInPayload struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=6"`
 }
@@ -74,4 +74,10 @@ type AuthRequest struct {
 // RefreshTokenRequest represents a token refresh request
 type RefreshTokenRequest struct {
 	RefreshToken string `json:"refresh_token" validate:"required"`
+}
+
+type AuthErrorResponse struct {
+	Code      int    `json:"code"`
+	ErrorCode string `json:"error_code"`
+	Msg       string `json:"msg"`
 }
