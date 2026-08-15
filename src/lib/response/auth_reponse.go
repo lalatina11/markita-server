@@ -24,13 +24,26 @@ type User struct {
 	Role        string `json:"role"`
 }
 
-type AuthPayload struct {
+type AuthSuccessPayload struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 	User         User   `json:"user"`
 }
 
-type AuthErrorResponse struct {
+func (this *AuthSuccessResult) ToPayload() *AuthSuccessPayload {
+	return &AuthSuccessPayload{
+		AccessToken:  this.AccessToken,
+		RefreshToken: this.RefreshToken,
+		User: User{
+			ID:          this.User.ID,
+			DisplayName: this.User.UserMetadata.DisplayName,
+			Email:       this.User.UserMetadata.Email,
+			Role:        this.User.UserMetadata.Role,
+		},
+	}
+}
+
+type AuthErrorResult struct {
 	Code      int    `json:"code"`
 	ErrorCode string `json:"error_code"`
 	Msg       string `json:"msg"`

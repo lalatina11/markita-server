@@ -2,8 +2,8 @@ package service
 
 import (
 	"encoding/json"
-	"fmt"
 
+	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/lib/payload"
 	"github.com/lalatina11/markita.git/src/lib/response"
 )
@@ -17,23 +17,32 @@ func NewAuthService() *AuthService {
 	return &AuthService{SupabaseService}
 }
 
-func (this *AuthService) SignUp(payload *payload.RegisterPayload) error {
+func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.AuthSuccessPayload, *service_error.ServiError) {
+	serviceError := service_error.NewServiceError()
 	payload.Data.Role = "user"
 	stringBody, err := this.SupabaseService.AuthSignUp(payload)
 
-	fmt.Println(stringBody)
-
 	if err != nil {
-		return err
+		return nil, serviceError
 	}
 
 	successResult := new(response.AuthSuccessResult)
+	errorResult := new(response.AuthErrorResult)
 
 	err = json.Unmarshal([]byte(stringBody), successResult)
 
 	if err != nil {
-		return err
+		err = json.Unmarshal([]byte(stringBody), errorResult)
+
+		if err != nil {
+			return nil, serviceError
+		} else {
+			serviceError.Code = errorResult.Code
+			serviceError.Msg = errorResult.Msg
+			return nil, serviceError
+		}
+	} else {
+		return successResult.ToPayload(), nil
 	}
 
-	return nil
 }

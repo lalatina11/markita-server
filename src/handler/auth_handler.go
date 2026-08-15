@@ -23,12 +23,12 @@ func (this *AuthHandler) SignUp(c fiber.Ctx) error {
 		return response.ErrorResponse(c, nil, nil)
 	}
 
-	err := this.Service.SignUp(payload)
+	res, err := this.Service.SignUp(payload)
 
 	if err != nil {
 		return response.ErrorResponse(c, nil, nil)
 
 	}
 
-	return response.SuccessResponse[any](c, nil, nil, nil)
+	return response.SuccessResponse(c, nil, res, nil)
 }
