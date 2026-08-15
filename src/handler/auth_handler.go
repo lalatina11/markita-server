@@ -26,8 +26,7 @@ func (this *AuthHandler) SignUp(c fiber.Ctx) error {
 	res, err := this.Service.SignUp(payload)
 
 	if err != nil {
-		return response.ErrorResponse(c, nil, nil)
-
+		return err.ToResponse(c)
 	}
 
 	return response.SuccessResponse(c, nil, res, nil)
