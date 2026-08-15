@@ -31,7 +31,7 @@ func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.Aut
 
 	err = json.Unmarshal([]byte(stringBody), successResult)
 
-	if err != nil {
+	if err != nil || successResult.AccessToken == "" {
 		err = json.Unmarshal([]byte(stringBody), errorResult)
 
 		if err != nil {

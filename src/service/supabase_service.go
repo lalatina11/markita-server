@@ -27,7 +27,6 @@ func (this *SupabaseService) AuthSignUp(payload *payload.RegisterPayload) (strin
 		return "", err
 	}
 
-	fmt.Println(jsonData)
 	signUpURL := fmt.Sprintf("%s/signup", this.Config.AuthURL)
 
 	req, err := http.NewRequest(http.MethodPost, signUpURL, bytes.NewBuffer(jsonData))
