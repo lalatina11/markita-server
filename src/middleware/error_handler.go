@@ -11,14 +11,6 @@ type AppError struct {
 	StatusCode int
 }
 
-func (e *AppError) Error() string {
-	return e.Message
-}
-
-func NewAppError(message string, statusCode int) *AppError {
-	return &AppError{Message: message, StatusCode: statusCode}
-}
-
 func ErrorHandler() fiber.Handler {
 	return func(c fiber.Ctx) error {
 		if err := c.Next(); err != nil {
