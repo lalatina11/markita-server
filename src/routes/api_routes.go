@@ -11,5 +11,7 @@ func ApiRoutes(app *fiber.App) *fiber.Router {
 		return response.SuccessResponse[any](c, nil, nil, nil)
 	})
 
+	AuthRoutes(api)
+
 	return &api
 }

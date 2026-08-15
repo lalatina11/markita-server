@@ -1,9 +1,16 @@
 package routes
 
-import "github.com/gofiber/fiber/v3"
+import (
+	"github.com/gofiber/fiber/v3"
+	"github.com/lalatina11/markita.git/src/handler"
+)
 
-func AuthRoutes(api *fiber.App) *fiber.Router {
-	routes := api.Group("/auth")
+func AuthRoutes(api fiber.Router) *fiber.Router {
+	r := api.Group("/auth")
 
-	return &routes
+	handler := handler.NewAuthHandler()
+
+	r.Post("/sign-up", handler.SignUp)
+
+	return &r
 }
