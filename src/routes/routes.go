@@ -16,6 +16,7 @@ func AppRoutes(app *fiber.App) {
 
 	appHandler := handler.NewAppHandler()
 	app.Get("/", appHandler.Root)
+	ApiRoutes(app)
 
 	// ← 404 handler must be LAST, after all routes
 	app.Use(middleware.NotFoundHandler())
