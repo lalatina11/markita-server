@@ -17,7 +17,7 @@ func NewAuthService() *AuthService {
 	return &AuthService{SupabaseService}
 }
 
-func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.AuthSuccessPayload, *service_error.ServiError) {
+func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.AuthSuccessPayload, *service_error.ServiceError) {
 	serviceError := service_error.NewServiceError()
 	payload.Data.Role = "user"
 	stringBody, err := this.SupabaseService.AuthSignUp(payload)
