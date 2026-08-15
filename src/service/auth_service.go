@@ -18,31 +18,21 @@ func NewAuthService() *AuthService {
 }
 
 func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.AuthSuccessPayload, *service_error.ServiceError) {
-	serviceError := service_error.NewServiceError()
 	payload.Data.Role = "user"
 	stringBody, err := this.SupabaseService.AuthSignUp(payload)
-
 	if err != nil {
-		return nil, serviceError
+		return nil, service_error.NewServiceError()
 	}
 
-	successResult := new(response.AuthSuccessResult)
-	errorResult := new(response.AuthErrorResult)
-
-	err = json.Unmarshal([]byte(stringBody), successResult)
-
-	if err != nil || successResult.AccessToken == "" {
-		err = json.Unmarshal([]byte(stringBody), errorResult)
-
-		if err != nil {
-			return nil, serviceError
-		} else {
-			serviceError.Code = errorResult.Code
-			serviceError.Msg = errorResult.Msg
-			return nil, serviceError
-		}
-	} else {
+	var successResult response.AuthSuccessResult
+	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.AccessToken != "" {
 		return successResult.ToPayload(), nil
 	}
 
+	var errorResult response.AuthErrorResult
+	if err := json.Unmarshal([]byte(stringBody), &errorResult); err == nil && errorResult.Msg != "" {
+		return nil, service_error.CreateServiceError(errorResult.Code, errorResult.Msg)
+	}
+
+	return nil, service_error.NewServiceError()
 }
