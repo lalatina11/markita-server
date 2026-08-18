@@ -20,7 +20,7 @@ func NewAuthService() *AuthService {
 	return &AuthService{SupabaseService, UserService}
 }
 
-func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.AuthUserPayload, *service_error.ServiceError) {
+func (this *AuthService) SignUp(payload *payload.SignUpPayload) (*response.AuthUserPayload, *service_error.ServiceError) {
 	payload.Data.Role = "user"
 	errs := validator.Validate(payload)
 	if errs != nil {

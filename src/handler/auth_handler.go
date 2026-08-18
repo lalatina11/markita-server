@@ -19,7 +19,7 @@ func NewAuthHandler() *AuthHandler {
 }
 
 func (this *AuthHandler) SignUp(c fiber.Ctx) error {
-	payload := new(payload.RegisterPayload)
+	payload := new(payload.SignUpPayload)
 
 	if err := c.Bind().Body(payload); err != nil {
 		return response.ErrorResponse(c, nil, nil)
