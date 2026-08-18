@@ -2,11 +2,13 @@ package service
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/lib/payload"
 	"github.com/lalatina11/markita.git/src/lib/response"
 	"github.com/lalatina11/markita.git/src/lib/validator"
+	"github.com/lalatina11/markita.git/src/model"
 )
 
 type AuthService struct {
@@ -74,19 +76,19 @@ func (this *AuthService) SignIn(payload *payload.SignInPayload) (*response.AuthU
 	}
 	return nil, service_error.NewServiceError()
 }
-func (this *AuthService) GetUser(token string) (*response.AuthUserPayload, *service_error.ServiceError) {
-	var successResult response.AuthSuccessResult
+func (this *AuthService) GetUser(token string) (*model.User, *service_error.ServiceError) {
+	var successResult response.AuthGetUserSuccessResponse
 	stringBody, err := this.SupabaseService.AuthGetUser(token)
+	fmt.Println(stringBody)
 	if err != nil {
 		return nil, service_error.NewServiceError()
 	}
-	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.IsSuccess() {
-		payload := successResult.ToPayload()
-		user, err := this.UserService.Find(payload.User.ID)
+	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.IsGetUserSuccess() {
+		user, err := this.UserService.Find(successResult.ID)
 		if err != nil {
-			return nil, service_error.Create(500, "Failed to create User")
+			return nil, service_error.Create(500, "Failed to Get User")
 		}
-		return payload.ToAuthUserPayload(user), nil
+		return user, nil
 	}
 
 	var errorResult response.AuthErrorResult

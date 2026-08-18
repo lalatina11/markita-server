@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
@@ -53,11 +54,12 @@ func (this *AuthHandler) SignIn(c fiber.Ctx) error {
 }
 
 func (this *AuthHandler) GetUser(c fiber.Ctx) error {
-	token := c.GetRespHeader("Authorization")
+	token := c.Get(fiber.HeaderAuthorization)
 
 	if token == "" {
 		status := 401
 		message := "Unauthorized"
+		fmt.Println("tidak ada token")
 		return response.ErrorResponse(c, &message, &status)
 	}
 
@@ -66,7 +68,5 @@ func (this *AuthHandler) GetUser(c fiber.Ctx) error {
 	if err != nil {
 		return err.ToResponse(c)
 	}
-	c.Cookie(&fiber.Cookie{Name: "access_token", Value: res.AccessToken, Path: "/", Expires: time.Now().Add(24 * time.Hour), SameSite: "lax", HTTPOnly: true})
-	c.Cookie(&fiber.Cookie{Name: "refresh_token", Value: res.RefreshToken, Path: "/", Expires: time.Now().Add(7 * 24 * time.Hour), SameSite: "lax", HTTPOnly: true})
 	return response.SuccessResponse(c, nil, res, nil)
 }

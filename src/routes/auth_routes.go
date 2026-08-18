@@ -12,7 +12,7 @@ func AuthRoutes(api fiber.Router) *fiber.Router {
 
 	r.Post("/sign-up", handler.SignUp)
 	r.Post("/sign-in", handler.SignIn)
-	r.Post("/me", handler.GetUser)
+	r.Get("/me", handler.GetUser)
 
 	return &r
 }

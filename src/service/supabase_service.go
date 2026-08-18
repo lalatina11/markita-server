@@ -96,7 +96,7 @@ func (this *SupabaseService) AuthSignIn(payload *payload.SignInPayload) (string,
 
 func (this *SupabaseService) AuthGetUser(token string) (string, error) {
 
-	url := fmt.Sprintf("%s/token?grant_type=password", this.Config.AuthURL)
+	url := fmt.Sprintf("%s/user", this.Config.AuthURL)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 

@@ -68,3 +68,11 @@ type AuthErrorResult struct {
 	ErrorCode string `json:"error_code"`
 	Msg       string `json:"msg"`
 }
+
+type AuthGetUserSuccessResponse struct {
+	ID string `json:"id"`
+}
+
+func (this *AuthGetUserSuccessResponse) IsGetUserSuccess() bool {
+	return this.ID != ""
+}
