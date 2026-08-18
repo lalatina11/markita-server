@@ -34,3 +34,20 @@ func (this *AuthHandler) SignUp(c fiber.Ctx) error {
 	c.Cookie(&fiber.Cookie{Name: "refresh_token", Value: res.RefreshToken, Path: "/", Expires: time.Now().Add(7 * 24 * time.Hour), SameSite: "lax", HTTPOnly: true})
 	return response.SuccessResponse(c, nil, res, nil)
 }
+
+func (this *AuthHandler) SignIn(c fiber.Ctx) error {
+	payload := new(payload.SignInPayload)
+
+	if err := c.Bind().Body(payload); err != nil {
+		return response.ErrorResponse(c, nil, nil)
+	}
+
+	res, err := this.Service.SignIn(payload)
+
+	if err != nil {
+		return err.ToResponse(c)
+	}
+	c.Cookie(&fiber.Cookie{Name: "access_token", Value: res.AccessToken, Path: "/", Expires: time.Now().Add(24 * time.Hour), SameSite: "lax", HTTPOnly: true})
+	c.Cookie(&fiber.Cookie{Name: "refresh_token", Value: res.RefreshToken, Path: "/", Expires: time.Now().Add(7 * 24 * time.Hour), SameSite: "lax", HTTPOnly: true})
+	return response.SuccessResponse(c, nil, res, nil)
+}

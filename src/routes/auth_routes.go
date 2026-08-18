@@ -11,6 +11,7 @@ func AuthRoutes(api fiber.Router) *fiber.Router {
 	handler := handler.NewAuthHandler()
 
 	r.Post("/sign-up", handler.SignUp)
+	r.Post("/sign-in", handler.SignIn)
 
 	return &r
 }
