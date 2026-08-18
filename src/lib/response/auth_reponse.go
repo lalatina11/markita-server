@@ -18,16 +18,16 @@ type UserData struct {
 }
 
 type UserMetadata struct {
-	DisplayName string `json:"display_name"`
-	Email       string `json:"email"`
-	Role        string `json:"role"`
+	DisplayName string         `json:"display_name"`
+	Email       string         `json:"email"`
+	Role        model.UserRole `json:"role"`
 }
 
 type User struct {
-	ID          string `json:"id"`
-	DisplayName string `json:"display_name"`
-	Email       string `json:"email"`
-	Role        string `json:"role"`
+	ID          string         `json:"id"`
+	DisplayName string         `json:"display_name"`
+	Email       string         `json:"email"`
+	Role        model.UserRole `json:"role"`
 }
 
 type AuthSuccessPayload struct {
