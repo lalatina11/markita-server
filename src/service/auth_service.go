@@ -74,3 +74,24 @@ func (this *AuthService) SignIn(payload *payload.SignInPayload) (*response.AuthU
 	}
 	return nil, service_error.NewServiceError()
 }
+func (this *AuthService) GetUser(token string) (*response.AuthUserPayload, *service_error.ServiceError) {
+	var successResult response.AuthSuccessResult
+	stringBody, err := this.SupabaseService.AuthGetUser(token)
+	if err != nil {
+		return nil, service_error.NewServiceError()
+	}
+	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.IsSuccess() {
+		payload := successResult.ToPayload()
+		user, err := this.UserService.FindOrCreate(payload)
+		if err != nil {
+			return nil, service_error.Create(500, "Failed to create User")
+		}
+		return payload.ToAuthUserPayload(user), nil
+	}
+
+	var errorResult response.AuthErrorResult
+	if err := json.Unmarshal([]byte(stringBody), &errorResult); err == nil && errorResult.Msg != "" {
+		return nil, service_error.Create(errorResult.Code, errorResult.Msg)
+	}
+	return nil, service_error.NewServiceError()
+}

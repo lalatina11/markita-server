@@ -61,3 +61,16 @@ func (this *UserService) FindOrCreate(payload *response.AuthSuccessPayload) (*mo
 
 	return user, nil
 }
+
+func (this *UserService) Find(id string) (*model.User, *service_error.ServiceError) {
+
+	user := new(model.User)
+	user.ID = id
+
+	err := this.Db.Model(&model.User{}).Find(user).Error
+	if err != nil {
+		return nil, service_error.InternalServerError()
+	}
+
+	return user, nil
+}
