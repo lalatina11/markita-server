@@ -46,11 +46,11 @@ func (this *UserService) FindOrCreate(payload *response.AuthSuccessPayload) (*mo
 
 	user := new(model.User)
 	user.ID = payload.User.ID
-	user.DisplayName = payload.User.DisplayName
-	user.Email = payload.User.Email
-	user.Role = payload.User.Role
 	err := this.Db.Model(&model.User{}).First(user).Error
 	if err != nil {
+		user.DisplayName = payload.User.DisplayName
+		user.Email = payload.User.Email
+		user.Role = payload.User.Role
 		user.Avatar = avatar
 		_user, err := this.CreateUser(payload)
 		if err != nil {
