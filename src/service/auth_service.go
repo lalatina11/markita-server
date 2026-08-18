@@ -6,6 +6,7 @@ import (
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/lib/payload"
 	"github.com/lalatina11/markita.git/src/lib/response"
+	"github.com/lalatina11/markita.git/src/lib/validator"
 )
 
 type AuthService struct {
@@ -21,6 +22,10 @@ func NewAuthService() *AuthService {
 
 func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.AuthUserPayload, *service_error.ServiceError) {
 	payload.Data.Role = "user"
+	errs := validator.Validate(payload)
+	if errs != nil {
+		return nil, errs[0].ToServiceError()
+	}
 	stringBody, err := this.SupabaseService.AuthSignUp(payload)
 	if err != nil {
 		return nil, service_error.NewServiceError()
