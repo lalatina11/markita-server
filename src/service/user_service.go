@@ -31,7 +31,7 @@ func (this *UserService) CreateUser(payload *response.AuthSuccessPayload) (*mode
 	newUser.DisplayName = payload.User.DisplayName
 	newUser.Email = payload.User.Email
 	newUser.Avatar = avatar
-	err := this.Db.Create(&newUser).Error
+	err := this.Db.Create(newUser).Error
 
 	if err != nil {
 		return nil, service_error.InternalServerError()
@@ -48,9 +48,13 @@ func (this *UserService) FindOrCreate(payload *response.AuthSuccessPayload) (*mo
 	user.DisplayName = payload.User.DisplayName
 	user.Email = payload.User.Email
 	user.Avatar = avatar
-	err := this.Db.FirstOrCreate(&user).Error
+	err := this.Db.Model(&model.User{}).First(user).Error
 	if err != nil {
-		return nil, service_error.InternalServerError()
+		_user, err := this.CreateUser(payload)
+		if err != nil {
+			return nil, service_error.InternalServerError()
+		}
+		return _user, nil
 	}
 
 	return user, nil
