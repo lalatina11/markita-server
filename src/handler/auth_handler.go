@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
@@ -59,7 +58,6 @@ func (this *AuthHandler) GetUser(c fiber.Ctx) error {
 	if token == "" {
 		status := 401
 		message := "Unauthorized"
-		fmt.Println("tidak ada token")
 		return response.ErrorResponse(c, &message, &status)
 	}
 
