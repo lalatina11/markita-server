@@ -39,3 +39,19 @@ func (this *UserService) CreateUser(payload *response.AuthSuccessPayload) (*mode
 
 	return newUser, nil
 }
+
+func (this *UserService) FindOrCreate(payload *response.AuthSuccessPayload) (*model.User, *service_error.ServiceError) {
+	avatar := fmt.Sprintf("%s%s", config.NewAppConfig().AvatarBaseURL, payload.User.DisplayName)
+
+	user := new(model.User)
+	user.ID = payload.User.ID
+	user.DisplayName = payload.User.DisplayName
+	user.Email = payload.User.Email
+	user.Avatar = avatar
+	err := this.Db.FirstOrCreate(&user).Error
+	if err != nil {
+		return nil, service_error.InternalServerError()
+	}
+
+	return user, nil
+}
