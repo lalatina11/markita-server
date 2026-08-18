@@ -64,9 +64,9 @@ func (this *SupabaseService) AuthSignIn(payload *payload.SignInPayload) (string,
 		return "", err
 	}
 
-	signUpURL := fmt.Sprintf("%s/signup", this.Config.AuthURL)
+	signInURL := fmt.Sprintf("%s/token?grant_type=password", this.Config.AuthURL)
 
-	req, err := http.NewRequest(http.MethodPost, signUpURL, bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest(http.MethodPost, signInURL, bytes.NewBuffer(jsonData))
 
 	if err != nil {
 		return "", err
