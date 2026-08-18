@@ -82,7 +82,7 @@ func (this *AuthService) GetUser(token string) (*response.AuthUserPayload, *serv
 	}
 	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.IsSuccess() {
 		payload := successResult.ToPayload()
-		user, err := this.UserService.FindOrCreate(payload)
+		user, err := this.UserService.Find(payload.User.ID)
 		if err != nil {
 			return nil, service_error.Create(500, "Failed to create User")
 		}
