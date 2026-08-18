@@ -48,3 +48,29 @@ func (this *AuthService) SignUp(payload *payload.SignUpPayload) (*response.AuthU
 
 	return nil, service_error.NewServiceError()
 }
+
+func (this *AuthService) SignIn(payload *payload.SignInPayload) (*response.AuthUserPayload, *service_error.ServiceError) {
+	errs := validator.Validate(payload)
+	if errs != nil {
+		return nil, errs[0].ToServiceError()
+	}
+	var successResult response.AuthSuccessResult
+	stringBody, err := this.SupabaseService.AuthSignIn(payload)
+	if err != nil {
+		return nil, service_error.NewServiceError()
+	}
+	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.IsSuccess() {
+		payload := successResult.ToPayload()
+		user, err := this.UserService.CreateUser(payload)
+		if err != nil {
+			return nil, service_error.Create(500, "Failed to create User")
+		}
+		return payload.ToAuthUserPayload(user), nil
+	}
+
+	var errorResult response.AuthErrorResult
+	if err := json.Unmarshal([]byte(stringBody), &errorResult); err == nil && errorResult.Msg != "" {
+		return nil, service_error.Create(errorResult.Code, errorResult.Msg)
+	}
+	return nil, service_error.NewServiceError()
+}
