@@ -1,9 +1,15 @@
 package response
 
+import "github.com/lalatina11/markita.git/src/model"
+
 type AuthSuccessResult struct {
 	AccessToken  string   `json:"access_token"`
 	RefreshToken string   `json:"refresh_token"`
 	User         UserData `json:"user"`
+}
+
+func (this *AuthSuccessResult) IsSuccess() bool {
+	return this.AccessToken != ""
 }
 
 type UserData struct {
@@ -28,6 +34,20 @@ type AuthSuccessPayload struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 	User         User   `json:"user"`
+}
+
+type AuthUserPayload struct {
+	AccessToken  string      `json:"access_token"`
+	RefreshToken string      `json:"refresh_token"`
+	User         *model.User `json:"user"`
+}
+
+func (this *AuthSuccessPayload) ToAuthUserPayload(User *model.User) *AuthUserPayload {
+	return &AuthUserPayload{
+		AccessToken:  this.AccessToken,
+		RefreshToken: this.RefreshToken,
+		User:         User,
+	}
 }
 
 func (this *AuthSuccessResult) ToPayload() *AuthSuccessPayload {

@@ -10,14 +10,16 @@ import (
 
 type AuthService struct {
 	SupabaseService *SupabaseService
+	UserService     *UserService
 }
 
 func NewAuthService() *AuthService {
 	SupabaseService := NewSupabaseService()
-	return &AuthService{SupabaseService}
+	UserService := NewUserService()
+	return &AuthService{SupabaseService, UserService}
 }
 
-func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.AuthSuccessPayload, *service_error.ServiceError) {
+func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.AuthUserPayload, *service_error.ServiceError) {
 	payload.Data.Role = "user"
 	stringBody, err := this.SupabaseService.AuthSignUp(payload)
 	if err != nil {
@@ -25,8 +27,13 @@ func (this *AuthService) SignUp(payload *payload.RegisterPayload) (*response.Aut
 	}
 
 	var successResult response.AuthSuccessResult
-	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.AccessToken != "" {
-		return successResult.ToPayload(), nil
+	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.IsSuccess() {
+		payload := successResult.ToPayload()
+		user, err := this.UserService.CreateUser(payload)
+		if err != nil {
+			return nil, service_error.Create(500, "Failed to create User")
+		}
+		return payload.ToAuthUserPayload(user), nil
 	}
 
 	var errorResult response.AuthErrorResult

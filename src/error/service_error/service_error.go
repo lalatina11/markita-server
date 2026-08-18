@@ -13,6 +13,9 @@ type ServiceError struct {
 func NewServiceError() *ServiceError {
 	return &ServiceError{Code: 500, Msg: "Internal Server Error"}
 }
+func InternalServerError() *ServiceError {
+	return &ServiceError{Code: 500, Msg: "Internal Server Error"}
+}
 
 func Create(Code int, Msg string) *ServiceError {
 	return &ServiceError{Code, Msg}
