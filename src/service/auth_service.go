@@ -2,7 +2,6 @@ package service
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/lib/payload"
@@ -79,7 +78,6 @@ func (this *AuthService) SignIn(payload *payload.SignInPayload) (*response.AuthU
 func (this *AuthService) GetUser(token string) (*model.User, *service_error.ServiceError) {
 	var successResult response.AuthGetUserSuccessResponse
 	stringBody, err := this.SupabaseService.AuthGetUser(token)
-	fmt.Println(stringBody)
 	if err != nil {
 		return nil, service_error.NewServiceError()
 	}
