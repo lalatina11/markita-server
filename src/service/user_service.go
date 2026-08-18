@@ -30,6 +30,7 @@ func (this *UserService) CreateUser(payload *response.AuthSuccessPayload) (*mode
 	newUser.ID = payload.User.ID
 	newUser.DisplayName = payload.User.DisplayName
 	newUser.Email = payload.User.Email
+	newUser.Role = payload.User.Role
 	newUser.Avatar = avatar
 	err := this.Db.Create(newUser).Error
 
