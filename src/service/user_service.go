@@ -48,7 +48,7 @@ func (this *UserService) FindOrCreate(payload *response.AuthSuccessPayload) (*mo
 	user.DisplayName = payload.User.DisplayName
 	user.Email = payload.User.Email
 	user.Avatar = avatar
-	err := this.Db.Model(&model.User{}).First(user).Error
+	err := this.Db.Model(&model.User{}).Find(user).Error
 	if err != nil {
 		_user, err := this.CreateUser(payload)
 		if err != nil {

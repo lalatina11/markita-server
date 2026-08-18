@@ -61,7 +61,7 @@ func (this *AuthService) SignIn(payload *payload.SignInPayload) (*response.AuthU
 	}
 	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.IsSuccess() {
 		payload := successResult.ToPayload()
-		user, err := this.UserService.CreateUser(payload)
+		user, err := this.UserService.FindOrCreate(payload)
 		if err != nil {
 			return nil, service_error.Create(500, "Failed to create User")
 		}
