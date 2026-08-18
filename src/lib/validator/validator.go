@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	_validator "github.com/go-playground/validator/v10"
+	"github.com/lalatina11/markita.git/src/error/service_error"
 )
 
 var validate = _validator.New()
@@ -28,6 +29,10 @@ func init() {
 type ValidationErrorDetail struct {
 	Field   string `json:"field"`
 	Message string `json:"message"`
+}
+
+func (this *ValidationErrorDetail) ToServiceError() *service_error.ServiceError {
+	return service_error.ValidationError(this.Message)
 }
 
 func Validate(payload interface{}) []ValidationErrorDetail {
