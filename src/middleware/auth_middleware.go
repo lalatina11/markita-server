@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/gofiber/fiber/v3"
-	"github.com/lalatina11/markita.git/src/lib/response"
+	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/service"
 )
 
@@ -13,8 +13,7 @@ func AuthMiddleware() fiber.Handler {
 		user, err := service.NewAuthService().GetUser(token)
 
 		if err != nil {
-			message := "Error from Auth Middleware"
-			return response.ErrorResponse(c, &message, nil)
+			return service_error.Unauthorized().ToResponse(c)
 		}
 
 		c.Locals("token", token)
