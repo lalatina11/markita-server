@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/gofiber/fiber/v3"
 	"github.com/lalatina11/markita.git/src/config"
 	"github.com/lalatina11/markita.git/src/lib/payload"
 )
@@ -107,7 +108,7 @@ func (this *SupabaseService) AuthGetUser(token string) (string, error) {
 	req.Header.Set("Content-Type", "application/json")
 	apikey := fmt.Sprintf("Bearer %s", this.Config.PublishableKey)
 	req.Header.Set("apikey", apikey)
-	req.Header.Set("Authorization", token)
+	req.Header.Set(fiber.HeaderAuthorization, token)
 
 	client := &http.Client{}
 
@@ -126,4 +127,32 @@ func (this *SupabaseService) AuthGetUser(token string) (string, error) {
 
 	stringBody := string(body)
 	return stringBody, nil
+}
+
+func (this *SupabaseService) AuthSignOut(access_token string) error {
+
+	url := fmt.Sprintf("%s/logout", this.Config.AuthURL)
+
+	req, err := http.NewRequest(http.MethodPost, url, nil)
+
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	apikey := fmt.Sprintf("Bearer %s", this.Config.PublishableKey)
+	req.Header.Set("apikey", apikey)
+	req.Header.Set(fiber.HeaderAuthorization, access_token)
+
+	client := &http.Client{}
+
+	// Send the request
+	res, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer res.Body.Close()
+
+	return nil
 }
