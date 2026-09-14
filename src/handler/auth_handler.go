@@ -55,12 +55,6 @@ func (this *AuthHandler) SignIn(c fiber.Ctx) error {
 func (this *AuthHandler) GetUser(c fiber.Ctx) error {
 	token := c.Get(fiber.HeaderAuthorization)
 
-	if token == "" {
-		status := 401
-		message := "Unauthorized"
-		return response.ErrorResponse(c, &message, &status)
-	}
-
 	res, err := this.Service.GetUser(token)
 
 	if err != nil {
