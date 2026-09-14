@@ -96,3 +96,12 @@ func (this *AuthService) GetUser(token string) (*model.User, *service_error.Serv
 	}
 	return nil, service_error.NewServiceError()
 }
+
+func (this *AuthService) SignOut(access_token string) *service_error.ServiceError {
+	err := this.SupabaseService.AuthSignOut(access_token)
+	if err != nil {
+		return service_error.Unauthorized()
+	}
+
+	return nil
+}

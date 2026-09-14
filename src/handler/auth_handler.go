@@ -58,3 +58,16 @@ func (this *AuthHandler) GetUser(c fiber.Ctx) error {
 
 	return response.SuccessResponse(c, nil, user, nil)
 }
+
+func (this *AuthHandler) SignOut(c fiber.Ctx) error {
+	access_token := c.Get(fiber.HeaderAuthorization)
+	err := this.Service.SignOut(access_token)
+
+	if err != nil {
+		return err.ToResponse(c)
+	}
+	msg := "Sign Out Success!"
+	c.Cookie(&fiber.Cookie{Name: "access_token", Value: "", Path: "/", Expires: time.Now(), SameSite: "lax", HTTPOnly: true})
+	c.Cookie(&fiber.Cookie{Name: "refresh_token", Value: "", Path: "/", Expires: time.Now(), SameSite: "lax", HTTPOnly: true})
+	return response.SuccessResponse[any](c, &msg, nil, nil)
+}
