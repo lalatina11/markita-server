@@ -105,3 +105,32 @@ func (this *AuthService) SignOut(access_token string) *service_error.ServiceErro
 
 	return nil
 }
+
+func (this *AuthService) RefreshToken(payload *payload.RefreshTokenPayload) (*response.AuthUserPayload, *service_error.ServiceError) {
+	errs := validator.Validate(payload)
+	if errs != nil {
+		return nil, errs[0].ToServiceError()
+	}
+
+	stringBody, err := this.SupabaseService.AuthRefreshToken(payload)
+	if err != nil {
+		return nil, service_error.InternalServerError()
+	}
+	var successResult response.AuthSuccessResult
+
+	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.IsSuccess() {
+		payload := successResult.ToPayload()
+		user, err := this.UserService.FindOrCreate(payload)
+		if err != nil {
+			return nil, service_error.Create(500, "Failed to create User")
+		}
+		return payload.ToAuthUserPayload(user), nil
+	}
+
+	var errorResult response.AuthErrorResult
+	if err := json.Unmarshal([]byte(stringBody), &errorResult); err == nil && errorResult.Msg != "" {
+		return nil, service_error.Create(errorResult.Code, errorResult.Msg)
+	}
+
+	return nil, service_error.InternalServerError()
+}

@@ -71,3 +71,17 @@ func (this *AuthHandler) SignOut(c fiber.Ctx) error {
 	c.Cookie(&fiber.Cookie{Name: "refresh_token", Value: "", Path: "/", Expires: time.Now(), SameSite: "lax", HTTPOnly: true})
 	return response.SuccessResponse[any](c, &msg, nil, nil)
 }
+
+func (this *AuthHandler) RefreshToken(c fiber.Ctx) error {
+	payload := new(payload.RefreshTokenPayload)
+	if err := c.Bind().Body(payload); err != nil {
+		return response.ErrorResponse(c, nil, nil)
+	}
+	res, err := this.Service.RefreshToken(payload)
+	if err != nil {
+		return err.ToResponse(c)
+	}
+
+	return response.SuccessResponse(c, nil, res, nil)
+
+}

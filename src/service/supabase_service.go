@@ -157,7 +157,7 @@ func (this *SupabaseService) AuthSignOut(access_token string) error {
 	return nil
 }
 
-func (this *SupabaseService) AuthRefreshToken(payload payload.RefreshTokenPayload) (string, error) {
+func (this *SupabaseService) AuthRefreshToken(payload *payload.RefreshTokenPayload) (string, error) {
 	jsonData, err := json.Marshal(payload)
 
 	if err != nil {

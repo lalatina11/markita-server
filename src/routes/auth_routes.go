@@ -13,6 +13,7 @@ func AuthRoutes(api fiber.Router) *fiber.Router {
 
 	r.Post("/sign-up", handler.SignUp)
 	r.Post("/sign-in", handler.SignIn)
+	r.Post("/refresh", handler.RefreshToken)
 
 	// Protected Routes
 	r.Get("/me", middleware.AuthMiddleware(), handler.GetUser)
