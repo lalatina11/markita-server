@@ -156,3 +156,40 @@ func (this *SupabaseService) AuthSignOut(access_token string) error {
 
 	return nil
 }
+
+func (this *SupabaseService) AuthRefreshToken(payload payload.RefreshTokenPayload) (string, error) {
+	jsonData, err := json.Marshal(payload)
+
+	if err != nil {
+		return "", err
+	}
+
+	url := fmt.Sprintf("%s/token?grant_type=refresh_token", this.Config.AuthURL)
+
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(jsonData))
+
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	apikey := fmt.Sprintf("Bearer %s", this.Config.PublishableKey)
+	req.Header.Set("apikey", apikey)
+
+	client := &http.Client{}
+
+	// Send the request
+	res, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return "", err
+	}
+
+	stringBody := string(body)
+	return stringBody, nil
+}
