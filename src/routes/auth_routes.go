@@ -17,5 +17,6 @@ func AuthRoutes(api fiber.Router) *fiber.Router {
 	// Protected Routes
 	r.Use(middleware.AuthMiddleware())
 	r.Get("/me", handler.GetUser)
+	r.Delete("/sign-out", handler.SignOut)
 	return &r
 }
