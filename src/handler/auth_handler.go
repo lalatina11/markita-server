@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/lalatina11/markita.git/src/lib/payload"
 	"github.com/lalatina11/markita.git/src/lib/response"
+	"github.com/lalatina11/markita.git/src/model"
 	"github.com/lalatina11/markita.git/src/service"
 )
 
@@ -53,12 +54,7 @@ func (this *AuthHandler) SignIn(c fiber.Ctx) error {
 }
 
 func (this *AuthHandler) GetUser(c fiber.Ctx) error {
-	token := c.Get(fiber.HeaderAuthorization)
+	user := fiber.Locals[*model.User](c, "user")
 
-	res, err := this.Service.GetUser(token)
-
-	if err != nil {
-		return err.ToResponse(c)
-	}
-	return response.SuccessResponse(c, nil, res, nil)
+	return response.SuccessResponse(c, nil, user, nil)
 }

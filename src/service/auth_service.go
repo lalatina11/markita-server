@@ -75,6 +75,7 @@ func (this *AuthService) SignIn(payload *payload.SignInPayload) (*response.AuthU
 	}
 	return nil, service_error.NewServiceError()
 }
+
 func (this *AuthService) GetUser(token string) (*model.User, *service_error.ServiceError) {
 	var successResult response.AuthGetUserSuccessResponse
 	stringBody, err := this.SupabaseService.AuthGetUser(token)

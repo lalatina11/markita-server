@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/lalatina11/markita.git/src/handler"
+	"github.com/lalatina11/markita.git/src/middleware"
 )
 
 func AuthRoutes(api fiber.Router) *fiber.Router {
@@ -12,7 +13,9 @@ func AuthRoutes(api fiber.Router) *fiber.Router {
 
 	r.Post("/sign-up", handler.SignUp)
 	r.Post("/sign-in", handler.SignIn)
-	r.Get("/me", handler.GetUser)
 
+	// Protected Routes
+	r.Use(middleware.AuthMiddleware())
+	r.Get("/me", handler.GetUser)
 	return &r
 }
