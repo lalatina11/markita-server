@@ -9,7 +9,7 @@ import (
 
 func App() *fiber.App {
 	db := config.NewDatabaseConfig().Connect()
-	db.AutoMigrate(&model.User{}, &model.Store{})
+	db.AutoMigrate(&model.User{}, &model.Store{}, &model.Product{}, &model.ProductMedia{})
 	app := fiber.New()
 
 	routes.AppRoutes(app)

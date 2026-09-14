@@ -14,13 +14,13 @@ const (
 )
 
 type User struct {
-	ID          string         `json:"id" gorm:"primaryKey,index"`
+	ID          string         `json:"id" gorm:"primaryKey;index"`
 	DisplayName string         `json:"display_name" gorm:"index"`
-	Email       string         `json:"email" gorm:"unique,index"`
+	Email       string         `json:"email" gorm:"unique;index"`
 	Avatar      string         `json:"avatar"`
 	Role        UserRole       `json:"role"`
-	CreatedAt   time.Time      `json:"created_at"`
-	UpdatedAt   time.Time      `json:"updated_at"`
+	CreatedAt   time.Time      `json:"created_at" gorm:"autoCreateTime"`
+	UpdatedAt   time.Time      `json:"updated_at" gorm:"autoCreateTime;autoUpdateTime:milli"`
 	DeletedAt   gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	Stores      []Store        `json:"stores" gorm:"foreignKey:OwnerID;references:ID"`
 }
