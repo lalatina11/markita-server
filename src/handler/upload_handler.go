@@ -23,7 +23,7 @@ func (this *UploadHandler) Upload(c fiber.Ctx) error {
 
 	media, err := c.FormFile("media")
 	if err != nil {
-		msg := err.Error()
+		msg := "Please insert an Image or Video"
 		return response.ErrorResponse(c, &msg, nil)
 	}
 	mimeType := media.Header.Get("Content-Type")
