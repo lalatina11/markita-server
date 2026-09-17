@@ -193,3 +193,7 @@ func (this *SupabaseService) AuthRefreshToken(payload *payload.RefreshTokenPaylo
 	stringBody := string(body)
 	return stringBody, nil
 }
+
+func (this *SupabaseService) StorageUploadFile() error {
+	return nil
+}
