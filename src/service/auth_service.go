@@ -5,7 +5,7 @@ import (
 
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/lib/payload"
-	"github.com/lalatina11/markita.git/src/lib/response"
+	supabaseresponse "github.com/lalatina11/markita.git/src/lib/response/supabase_response"
 	"github.com/lalatina11/markita.git/src/lib/validator"
 	"github.com/lalatina11/markita.git/src/model"
 )
@@ -21,7 +21,7 @@ func NewAuthService() *AuthService {
 	return &AuthService{SupabaseService, UserService}
 }
 
-func (this *AuthService) SignUp(payload *payload.SignUpPayload) (*response.AuthUserPayload, *service_error.ServiceError) {
+func (this *AuthService) SignUp(payload *payload.SignUpPayload) (*supabaseresponse.AuthUserPayload, *service_error.ServiceError) {
 	payload.Data.Role = "user"
 	errs := validator.Validate(payload)
 	if errs != nil {
@@ -32,7 +32,7 @@ func (this *AuthService) SignUp(payload *payload.SignUpPayload) (*response.AuthU
 		return nil, service_error.NewServiceError()
 	}
 
-	var successResult response.AuthSuccessResult
+	var successResult supabaseresponse.AuthSuccessResult
 	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.IsSuccess() {
 		payload := successResult.ToPayload()
 		user, err := this.UserService.CreateUser(payload)
@@ -42,7 +42,7 @@ func (this *AuthService) SignUp(payload *payload.SignUpPayload) (*response.AuthU
 		return payload.ToAuthUserPayload(user), nil
 	}
 
-	var errorResult response.AuthErrorResult
+	var errorResult supabaseresponse.AuthErrorResult
 	if err := json.Unmarshal([]byte(stringBody), &errorResult); err == nil && errorResult.Msg != "" {
 		return nil, service_error.Create(errorResult.Code, errorResult.Msg)
 	}
@@ -50,12 +50,12 @@ func (this *AuthService) SignUp(payload *payload.SignUpPayload) (*response.AuthU
 	return nil, service_error.NewServiceError()
 }
 
-func (this *AuthService) SignIn(payload *payload.SignInPayload) (*response.AuthUserPayload, *service_error.ServiceError) {
+func (this *AuthService) SignIn(payload *payload.SignInPayload) (*supabaseresponse.AuthUserPayload, *service_error.ServiceError) {
 	errs := validator.Validate(payload)
 	if errs != nil {
 		return nil, errs[0].ToServiceError()
 	}
-	var successResult response.AuthSuccessResult
+	var successResult supabaseresponse.AuthSuccessResult
 	stringBody, err := this.SupabaseService.AuthSignIn(payload)
 	if err != nil {
 		return nil, service_error.NewServiceError()
@@ -69,7 +69,7 @@ func (this *AuthService) SignIn(payload *payload.SignInPayload) (*response.AuthU
 		return payload.ToAuthUserPayload(user), nil
 	}
 
-	var errorResult response.AuthErrorResult
+	var errorResult supabaseresponse.AuthErrorResult
 	if err := json.Unmarshal([]byte(stringBody), &errorResult); err == nil && errorResult.Msg != "" {
 		return nil, service_error.Create(errorResult.Code, errorResult.Msg)
 	}
@@ -77,7 +77,7 @@ func (this *AuthService) SignIn(payload *payload.SignInPayload) (*response.AuthU
 }
 
 func (this *AuthService) GetUser(token string) (*model.User, *service_error.ServiceError) {
-	var successResult response.AuthGetUserSuccessResponse
+	var successResult supabaseresponse.AuthGetUserSuccessResponse
 	stringBody, err := this.SupabaseService.AuthGetUser(token)
 	if err != nil {
 		return nil, service_error.NewServiceError()
@@ -90,7 +90,7 @@ func (this *AuthService) GetUser(token string) (*model.User, *service_error.Serv
 		return user, nil
 	}
 
-	var errorResult response.AuthErrorResult
+	var errorResult supabaseresponse.AuthErrorResult
 	if err := json.Unmarshal([]byte(stringBody), &errorResult); err == nil && errorResult.Msg != "" {
 		return nil, service_error.Unauthorized()
 	}
@@ -106,7 +106,7 @@ func (this *AuthService) SignOut(access_token string) *service_error.ServiceErro
 	return nil
 }
 
-func (this *AuthService) RefreshToken(payload *payload.RefreshTokenPayload) (*response.AuthUserPayload, *service_error.ServiceError) {
+func (this *AuthService) RefreshToken(payload *payload.RefreshTokenPayload) (*supabaseresponse.AuthUserPayload, *service_error.ServiceError) {
 	errs := validator.Validate(payload)
 	if errs != nil {
 		return nil, errs[0].ToServiceError()
@@ -116,7 +116,7 @@ func (this *AuthService) RefreshToken(payload *payload.RefreshTokenPayload) (*re
 	if err != nil {
 		return nil, service_error.InternalServerError()
 	}
-	var successResult response.AuthSuccessResult
+	var successResult supabaseresponse.AuthSuccessResult
 
 	if err := json.Unmarshal([]byte(stringBody), &successResult); err == nil && successResult.IsSuccess() {
 		payload := successResult.ToPayload()
@@ -127,7 +127,7 @@ func (this *AuthService) RefreshToken(payload *payload.RefreshTokenPayload) (*re
 		return payload.ToAuthUserPayload(user), nil
 	}
 
-	var errorResult response.AuthErrorResult
+	var errorResult supabaseresponse.AuthErrorResult
 	if err := json.Unmarshal([]byte(stringBody), &errorResult); err == nil && errorResult.Msg != "" {
 		return nil, service_error.Create(errorResult.Code, errorResult.Msg)
 	}

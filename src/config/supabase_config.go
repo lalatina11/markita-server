@@ -9,7 +9,7 @@ type SupabaseConfig struct {
 	StorageURL     string
 	PublishableKey string
 	SecretKey      string
-	AnonKey        string
+	ServiceRoleKey string
 }
 
 func NewSupabaseConfig() *SupabaseConfig {
@@ -19,7 +19,7 @@ func NewSupabaseConfig() *SupabaseConfig {
 	StorageURL := fmt.Sprintf("%s/storage/v1", ProjectURL)
 	PublishableKey := GetEnv("SUPABASE_PUBLISHABLE_KEY")
 	SecretKey := GetEnv("SUPABASE_SECRET_KEY")
-	AnonKey := GetEnv("SUPABASE_ANON_KEY")
+	AnonKey := GetEnv("SUPABASE_SERVICE_ROLE_KEY")
 
 	return &SupabaseConfig{DatabaseURL, ProjectURL, AuthURL, StorageURL, PublishableKey, SecretKey, AnonKey}
 }

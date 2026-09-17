@@ -5,7 +5,7 @@ import (
 
 	"github.com/lalatina11/markita.git/src/config"
 	"github.com/lalatina11/markita.git/src/error/service_error"
-	"github.com/lalatina11/markita.git/src/lib/response"
+	supabaseresponse "github.com/lalatina11/markita.git/src/lib/response/supabase_response"
 	"github.com/lalatina11/markita.git/src/model"
 	"gorm.io/gorm"
 )
@@ -19,7 +19,7 @@ func NewUserService() *UserService {
 	return &UserService{Db}
 }
 
-func (this *UserService) CreateUser(payload *response.AuthSuccessPayload) (*model.User, *service_error.ServiceError) {
+func (this *UserService) CreateUser(payload *supabaseresponse.AuthSuccessPayload) (*model.User, *service_error.ServiceError) {
 	if payload == nil {
 		return nil, service_error.Create(422, "Invalid payload")
 	}
@@ -41,7 +41,7 @@ func (this *UserService) CreateUser(payload *response.AuthSuccessPayload) (*mode
 	return newUser, nil
 }
 
-func (this *UserService) FindOrCreate(payload *response.AuthSuccessPayload) (*model.User, *service_error.ServiceError) {
+func (this *UserService) FindOrCreate(payload *supabaseresponse.AuthSuccessPayload) (*model.User, *service_error.ServiceError) {
 	avatar := fmt.Sprintf("%s%s", config.NewAppConfig().AvatarBaseURL, payload.User.DisplayName)
 
 	user := new(model.User)

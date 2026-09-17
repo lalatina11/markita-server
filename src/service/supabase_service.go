@@ -10,15 +10,18 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/lalatina11/markita.git/src/config"
 	"github.com/lalatina11/markita.git/src/lib/payload"
+	"github.com/lalatina11/markita.git/src/utils"
 )
 
 type SupabaseService struct {
 	Config *config.SupabaseConfig
+	Util   *utils.CommonUtility
 }
 
 func NewSupabaseService() *SupabaseService {
 	Config := config.NewSupabaseConfig()
-	return &SupabaseService{Config}
+	Util := utils.NewCommonUtiliity()
+	return &SupabaseService{Config, Util}
 }
 
 func (this *SupabaseService) AuthSignUp(payload *payload.SignUpPayload) (string, error) {
@@ -194,6 +197,38 @@ func (this *SupabaseService) AuthRefreshToken(payload *payload.RefreshTokenPaylo
 	return stringBody, nil
 }
 
-func (this *SupabaseService) StorageUploadFile() error {
-	return nil
+func (this *SupabaseService) StorageUploadFile(payload *payload.FileUploadPayload) (string, error) {
+	url := this.Config.StorageURL
+	file, err := payload.File.Open()
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+	url = fmt.Sprintf("%s/object/%s/%s", url, payload.Folder, this.Util.GenerateFileName())
+	req, err := http.NewRequest(http.MethodPost, url, file)
+
+	if err != nil {
+		return "", err
+	}
+
+	token := fmt.Sprintf("Bearer %s", this.Config.ServiceRoleKey)
+	mimeType := fmt.Sprintf("%s/*", payload.Type)
+	req.Header.Set("apikey", this.Config.PublishableKey)
+	req.Header.Set(fiber.HeaderContentType, mimeType)
+	req.Header.Set(fiber.HeaderAuthorization, token)
+
+	client := http.Client{}
+	res, err := client.Do(req)
+
+	body, err := io.ReadAll(res.Body)
+
+	if err != nil {
+		return "", err
+	}
+
+	defer res.Body.Close()
+
+	stringBody := string(body)
+
+	return stringBody, nil
 }

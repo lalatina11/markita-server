@@ -1,4 +1,4 @@
-package response
+package supabaseresponse
 
 import "github.com/lalatina11/markita.git/src/model"
 
