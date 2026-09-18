@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/lalatina11/markita.git/src/dto/auth_dto"
+	"github.com/lalatina11/markita.git/src/dto/store_dto"
 	"github.com/lalatina11/markita.git/src/utils"
 	"gorm.io/gorm"
 )
@@ -40,5 +41,20 @@ func (this *Store) ToUserWithStoreDTO() *auth_dto.UserStore {
 		Banner:  this.Banner,
 		Address: this.Address,
 		City:    this.City,
+	}
+}
+
+func (this *Store) ToStoreDTO() *store_dto.StoreWithOwnerDTO {
+	return &store_dto.StoreWithOwnerDTO{
+		ID:        this.ID,
+		Name:      this.Name,
+		OwnerID:   this.OwnerID,
+		Avatar:    this.Avatar,
+		Banner:    this.Banner,
+		Address:   this.Address,
+		City:      this.City,
+		CreatedAt: this.CreatedAt,
+		UpdatedAt: this.UpdatedAt,
+		Owner:     *this.Owner.ToStoreOwnerDTO(),
 	}
 }

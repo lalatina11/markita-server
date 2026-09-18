@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/google/uuid"
 	"github.com/lalatina11/markita.git/src/config"
+	"github.com/lalatina11/markita.git/src/dto/store_dto"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/model"
 	"gorm.io/gorm"
@@ -36,7 +37,7 @@ func (this *StoreService) CreateStore(store *model.Store, userId string) (*model
 	return store, nil
 }
 
-func (this *StoreService) Find(id string) (*model.Store, *service_error.ServiceError) {
+func (this *StoreService) Find(id string) (*store_dto.StoreWithOwnerDTO, *service_error.ServiceError) {
 	store := new(model.Store)
 	store.ID = id
 
@@ -46,10 +47,10 @@ func (this *StoreService) Find(id string) (*model.Store, *service_error.ServiceE
 		return nil, service_error.NotFound()
 	}
 
-	return store, nil
+	return store.ToStoreDTO(), nil
 }
 
-func (this *StoreService) GetAll() ([]model.Store, *service_error.ServiceError) {
+func (this *StoreService) GetAll() ([]store_dto.StoreWithOwnerDTO, *service_error.ServiceError) {
 	stores := []model.Store{}
 
 	err := this.Db.Preload("Owner").Model(&model.Store{}).Find(&stores).Error
@@ -58,6 +59,12 @@ func (this *StoreService) GetAll() ([]model.Store, *service_error.ServiceError) 
 		return nil, service_error.InternalServerError()
 	}
 
-	return stores, nil
+	var dto = make([]store_dto.StoreWithOwnerDTO, len(stores))
+
+	for i, store := range stores {
+		dto[i] = *store.ToStoreDTO()
+	}
+
+	return dto, nil
 
 }
