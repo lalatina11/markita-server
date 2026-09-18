@@ -13,6 +13,7 @@ func ApiRoutes(app *fiber.App) *fiber.Router {
 
 	AuthRoutes(api)
 	UploadRoutes(api)
+	StoreRoutes(api)
 
 	return &api
 }
