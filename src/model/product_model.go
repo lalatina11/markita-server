@@ -11,7 +11,7 @@ type Product struct {
 	StoreID     string         `json:"store_id" gorm:"not null;index"`
 	Name        string         `json:"name" gorm:"not null"`
 	Description string         `json:"description" gorm:"not null"`
-	Price       string         `json:"price" gorm:"precission"`
+	Price       uint64         `json:"price" gorm:"precission"`
 	CreatedAt   time.Time      `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt   time.Time      `json:"updated_at" gorm:"autoCreateTime;autoUpdateTime:milli"`
 	DeletedAt   gorm.DeletedAt `json:"deleted_at" gorm:"index"`
