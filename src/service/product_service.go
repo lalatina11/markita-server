@@ -20,7 +20,7 @@ func NewProductService() *ProductService {
 	return &ProductService{Db, StoreService}
 }
 
-func (this *ProductService) GetAllProducts() ([]model.Product, *service_error.ServiceError) {
+func (this *ProductService) GetAllProducts() ([]product_dto.ProductWithRelations, *service_error.ServiceError) {
 	products := []model.Product{}
 
 	err := this.Db.Preload("Store").Preload("Media").Model(model.Product{}).Find(&products).Error
@@ -29,7 +29,13 @@ func (this *ProductService) GetAllProducts() ([]model.Product, *service_error.Se
 		return nil, service_error.InternalServerError()
 	}
 
-	return products, nil
+	var _products = make([]product_dto.ProductWithRelations, len(products))
+
+	for i, product := range products {
+		_products[i] = *product.ToProductDTO()
+	}
+
+	return _products, nil
 }
 
 func (this *ProductService) CreateProduct(product *model.Product, user_id string) (*product_dto.ProductWithRelations, *service_error.ServiceError) {
