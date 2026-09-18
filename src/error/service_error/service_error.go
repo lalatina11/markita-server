@@ -38,6 +38,10 @@ func Forbidden() *ServiceError {
 	return &ServiceError{Code: 403, Msg: "Forbidden"}
 }
 
+func NotFound() *ServiceError {
+	return &ServiceError{Code: 404, Msg: "Not Found"}
+}
+
 func (this *ServiceError) ToResponse(c fiber.Ctx) error {
 	return response.ErrorResponse(c, &this.Msg, &this.Code)
 }

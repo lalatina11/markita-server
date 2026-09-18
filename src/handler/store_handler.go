@@ -32,3 +32,15 @@ func (this *StoreHandler) CreateStore(c fiber.Ctx) error {
 	}
 	return response.SuccessResponse(c, &msg, res, &code)
 }
+
+func (this *StoreHandler) Find(c fiber.Ctx) error {
+	id := c.Params("id")
+
+	store, err := this.StoreService.Find(id)
+	if err != nil {
+		return err.ToResponse(c)
+	}
+
+	return response.SuccessResponse(c, nil, store, nil)
+
+}

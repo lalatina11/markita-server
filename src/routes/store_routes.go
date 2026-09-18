@@ -12,6 +12,7 @@ func StoreRoutes(api fiber.Router) *fiber.Router {
 	handler := handler.NewStoreHandler()
 
 	r.Post("/", middleware.AuthMiddleware(), handler.CreateStore)
+	r.Get("/:id", handler.Find)
 
 	return &r
 }

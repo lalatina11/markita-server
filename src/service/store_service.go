@@ -27,15 +27,23 @@ func (this *StoreService) CreateStore(store *model.Store, userId string) (*model
 		return nil, service_error.CreateServiceError(500, "Failed to create a store")
 	}
 
-	user, _err := this.UserService.Find(userId)
-	if _err != nil {
-		return nil, _err
-	}
-
-	updateUserErr := this.UserService.UpdateRole(user.ID, "seller")
+	updateUserErr := this.UserService.UpdateRole(userId, "seller")
 
 	if updateUserErr != nil {
 		return nil, updateUserErr
+	}
+
+	return store, nil
+}
+
+func (this *StoreService) Find(id string) (*model.Store, *service_error.ServiceError) {
+	store := new(model.Store)
+	store.ID = id
+
+	err := this.Db.Preload("Owner").Model(&model.Store{}).First(store).Error
+
+	if err != nil {
+		return nil, service_error.NotFound()
 	}
 
 	return store, nil

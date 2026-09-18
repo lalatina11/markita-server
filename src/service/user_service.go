@@ -91,13 +91,18 @@ func (this *UserService) UpdateRole(id string, role string) *service_error.Servi
 		return service_error.CreateServiceError(422, "Invalid role!")
 	}
 
-	user := new(model.User)
+	user, err := this.Find(id)
+
+	if err != nil {
+		return service_error.NotFound()
+	}
+
 	user.ID = id
 	user.Role = role
 	user.UpdatedAt = time.Now()
 
-	err := this.Db.Save(user).Error
-	if err != nil {
+	_err := this.Db.Save(user).Error
+	if _err != nil {
 		return service_error.CreateServiceError(500, "Failed to update user role!")
 	}
 	return nil
