@@ -2,8 +2,10 @@ package service
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/lalatina11/markita.git/src/config"
+	"github.com/lalatina11/markita.git/src/constants"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	supabaseresponse "github.com/lalatina11/markita.git/src/lib/response/supabase_response"
 	"github.com/lalatina11/markita.git/src/model"
@@ -34,6 +36,10 @@ func (this *UserService) CreateUser(payload *supabaseresponse.AuthSuccessPayload
 	newUser.Avatar = avatar
 	err := this.Db.Create(newUser).Error
 
+	if !slices.Contains(constants.ALLOWED_USER_ROLES, newUser.Role) {
+		newUser.Role = "user"
+	}
+
 	if err != nil {
 		return nil, service_error.InternalServerError()
 	}
@@ -50,6 +56,9 @@ func (this *UserService) FindOrCreate(payload *supabaseresponse.AuthSuccessPaylo
 	if err != nil {
 		user.DisplayName = payload.User.DisplayName
 		user.Email = payload.User.Email
+		if !slices.Contains(constants.ALLOWED_USER_ROLES, user.Role) {
+			user.Role = "user"
+		}
 		user.Role = payload.User.Role
 		user.Avatar = avatar
 		_user, err := this.CreateUser(payload)
