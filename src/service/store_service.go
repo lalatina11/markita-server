@@ -48,3 +48,16 @@ func (this *StoreService) Find(id string) (*model.Store, *service_error.ServiceE
 
 	return store, nil
 }
+
+func (this *StoreService) GetAll() ([]model.Store, *service_error.ServiceError) {
+	stores := []model.Store{}
+
+	err := this.Db.Preload("Owner").Model(&model.Store{}).Find(&stores).Error
+
+	if err != nil {
+		return nil, service_error.InternalServerError()
+	}
+
+	return stores, nil
+
+}

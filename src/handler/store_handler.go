@@ -42,5 +42,13 @@ func (this *StoreHandler) Find(c fiber.Ctx) error {
 	}
 
 	return response.SuccessResponse(c, nil, store, nil)
+}
 
+func (this *StoreHandler) GetAll(c fiber.Ctx) error {
+	stores, err := this.StoreService.GetAll()
+	if err != nil {
+		return err.ToResponse(c)
+	}
+
+	return response.SuccessResponse(c, nil, stores, nil)
 }
