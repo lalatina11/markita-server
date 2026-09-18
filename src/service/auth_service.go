@@ -3,11 +3,11 @@ package service
 import (
 	"encoding/json"
 
+	"github.com/lalatina11/markita.git/src/dto/auth_dto"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/lib/payload"
 	supabaseresponse "github.com/lalatina11/markita.git/src/lib/response/supabase_response"
 	"github.com/lalatina11/markita.git/src/lib/validator"
-	"github.com/lalatina11/markita.git/src/model"
 )
 
 type AuthService struct {
@@ -76,7 +76,7 @@ func (this *AuthService) SignIn(payload *payload.SignInPayload) (*supabaserespon
 	return nil, service_error.NewServiceError()
 }
 
-func (this *AuthService) GetUser(token string) (*model.User, *service_error.ServiceError) {
+func (this *AuthService) GetUser(token string) (*auth_dto.UserWithStoresDto, *service_error.ServiceError) {
 	var successResult supabaseresponse.AuthGetUserSuccessResponse
 	stringBody, err := this.SupabaseService.AuthGetUser(token)
 	if err != nil {
@@ -87,7 +87,7 @@ func (this *AuthService) GetUser(token string) (*model.User, *service_error.Serv
 		if err != nil {
 			return nil, service_error.Create(500, "Failed to Get User")
 		}
-		return user, nil
+		return user.ToUserWithStoreDTO(), nil
 	}
 
 	var errorResult supabaseresponse.AuthErrorResult

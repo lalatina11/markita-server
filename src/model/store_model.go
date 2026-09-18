@@ -3,6 +3,7 @@ package model
 import (
 	"time"
 
+	"github.com/lalatina11/markita.git/src/dto/auth_dto"
 	"gorm.io/gorm"
 )
 
@@ -19,4 +20,16 @@ type Store struct {
 	UpdatedAt time.Time      `json:"updated_at" gorm:"autoCreateTime;autoUpdateTime:milli"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	Products  []Product      `json:"products" gorm:"foreignKey:StoreID;references:ID"`
+}
+
+func (this *Store) ToUserStoreDTO() *auth_dto.UserStore {
+	return &auth_dto.UserStore{
+		ID:      this.ID,
+		Name:    this.Name,
+		OwnerID: this.OwnerID,
+		Avatar:  this.Avatar,
+		Banner:  this.Banner,
+		Address: this.Address,
+		City:    this.City,
+	}
 }

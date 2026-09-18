@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v3"
+	"github.com/lalatina11/markita.git/src/dto/auth_dto"
 	"github.com/lalatina11/markita.git/src/lib/payload"
 	"github.com/lalatina11/markita.git/src/lib/response"
-	"github.com/lalatina11/markita.git/src/model"
 	"github.com/lalatina11/markita.git/src/service"
 )
 
@@ -54,7 +54,7 @@ func (this *AuthHandler) SignIn(c fiber.Ctx) error {
 }
 
 func (this *AuthHandler) GetUser(c fiber.Ctx) error {
-	user := fiber.Locals[*model.User](c, "user")
+	user := fiber.Locals[*auth_dto.UserWithStoresDto](c, "user")
 
 	return response.SuccessResponse(c, nil, user, nil)
 }
