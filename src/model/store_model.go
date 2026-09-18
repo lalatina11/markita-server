@@ -45,6 +45,7 @@ func (this *Store) ToUserWithStoreDTO() *auth_dto.UserStore {
 }
 
 func (this *Store) ToStoreDTO() *store_dto.StoreWithOwnerDTO {
+	this.FixMediaURL()
 	return &store_dto.StoreWithOwnerDTO{
 		ID:        this.ID,
 		Name:      this.Name,
