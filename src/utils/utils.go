@@ -14,8 +14,8 @@ type CommonUtility struct {
 }
 
 func NewCommonUtiliity() *CommonUtility {
-	Config := config.NewSupabaseConfig()
-	return &CommonUtility{Config}
+	SupabaseConfig := config.NewSupabaseConfig()
+	return &CommonUtility{SupabaseConfig}
 }
 
 func (this *CommonUtility) GenerateMediaURL(mediaURL string) string {
