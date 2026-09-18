@@ -2,8 +2,6 @@ package auth_dto
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type UserStore struct {
@@ -17,13 +15,12 @@ type UserStore struct {
 }
 
 type UserWithStoresDto struct {
-	ID          string         `json:"id"`
-	DisplayName string         `json:"display_name"`
-	Email       string         `json:"email"`
-	Avatar      string         `json:"avatar"`
-	Role        string         `json:"role"`
-	CreatedAt   time.Time      `json:"created_at"`
-	UpdatedAt   time.Time      `json:"updated_at"`
-	DeletedAt   gorm.DeletedAt `json:"deleted_at"`
-	Stores      []UserStore    `json:"stores"`
+	ID          string      `json:"id"`
+	DisplayName string      `json:"display_name"`
+	Email       string      `json:"email"`
+	Avatar      string      `json:"avatar"`
+	Role        string      `json:"role"`
+	CreatedAt   time.Time   `json:"created_at"`
+	UpdatedAt   time.Time   `json:"updated_at"`
+	Stores      []UserStore `json:"stores"`
 }

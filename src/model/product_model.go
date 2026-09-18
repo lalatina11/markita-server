@@ -33,7 +33,6 @@ func (this *Product) ToProductDTO() *product_dto.ProductWithRelations {
 		Price:       this.Price,
 		CreatedAt:   this.CreatedAt,
 		UpdatedAt:   this.UpdatedAt,
-		DeletedAt:   this.DeletedAt,
 		Store: product_dto.ProductStore{
 			ID:      this.Store.ID,
 			Name:    this.Store.Name,

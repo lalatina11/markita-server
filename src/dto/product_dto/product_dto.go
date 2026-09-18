@@ -2,8 +2,6 @@ package product_dto
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type ProductMedia struct {
@@ -30,7 +28,6 @@ type ProductWithRelations struct {
 	Price       uint64         `json:"price"`
 	CreatedAt   time.Time      `json:"created_at"`
 	UpdatedAt   time.Time      `json:"updated_at"`
-	DeletedAt   gorm.DeletedAt `json:"deleted_at"`
 	Store       ProductStore   `json:"store"`
 	Media       []ProductMedia `json:"media"`
 }
