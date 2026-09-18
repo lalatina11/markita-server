@@ -77,7 +77,7 @@ func (this *UserService) Find(id string) (*model.User, *service_error.ServiceErr
 	user := new(model.User)
 	user.ID = id
 
-	err := this.Db.Model(&model.User{}).First(user).Error
+	err := this.Db.Preload("Stores").Model(&model.User{}).First(user).Error
 	if err != nil {
 		return nil, service_error.InternalServerError()
 	}

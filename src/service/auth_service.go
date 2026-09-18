@@ -87,7 +87,6 @@ func (this *AuthService) GetUser(token string) (*model.User, *service_error.Serv
 		if err != nil {
 			return nil, service_error.Create(500, "Failed to Get User")
 		}
-		user.Stores = nil
 		return user, nil
 	}
 
