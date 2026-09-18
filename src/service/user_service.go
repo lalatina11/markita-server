@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"slices"
+	"time"
 
 	"github.com/lalatina11/markita.git/src/config"
 	"github.com/lalatina11/markita.git/src/constants"
@@ -82,4 +83,22 @@ func (this *UserService) Find(id string) (*model.User, *service_error.ServiceErr
 	}
 
 	return user, nil
+}
+
+func (this *UserService) UpdateRole(id string, role string) *service_error.ServiceError {
+
+	if !slices.Contains(constants.ALLOWED_USER_ROLES, role) {
+		return service_error.CreateServiceError(422, "Invalid role!")
+	}
+
+	user := new(model.User)
+	user.ID = id
+	user.Role = role
+	user.UpdatedAt = time.Now()
+
+	err := this.Db.Save(user).Error
+	if err != nil {
+		return service_error.CreateServiceError(500, "Failed to update user role!")
+	}
+	return nil
 }
