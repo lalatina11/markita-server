@@ -25,20 +25,9 @@ type Store struct {
 
 func (this *Store) FixMediaURL() *Store {
 	util := utils.NewCommonUtiliity()
-	return &Store{
-		ID:        this.ID,
-		Name:      this.Name,
-		Avatar:    util.GenerateMediaURL(this.Avatar),
-		Banner:    util.GenerateMediaURL(this.Banner),
-		OwnerID:   this.OwnerID,
-		Owner:     this.Owner,
-		Address:   this.Address,
-		City:      this.City,
-		CreatedAt: this.CreatedAt,
-		UpdatedAt: this.UpdatedAt,
-		DeletedAt: this.DeletedAt,
-		Products:  this.Products,
-	}
+	this.Avatar = util.GenerateMediaURL(this.Avatar)
+	this.Banner = util.GenerateMediaURL(this.Banner)
+	return this
 }
 
 func (this *Store) ToUserStoreDTO() *auth_dto.UserStore {
