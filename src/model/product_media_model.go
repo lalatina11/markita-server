@@ -3,6 +3,7 @@ package model
 import (
 	"time"
 
+	"github.com/lalatina11/markita.git/src/dto/product_dto"
 	"github.com/lalatina11/markita.git/src/utils"
 	"gorm.io/gorm"
 )
@@ -21,4 +22,13 @@ type ProductMedia struct {
 func (this *ProductMedia) FixMediaURL() *ProductMedia {
 	this.MediaURL = utils.NewCommonUtiliity().GenerateMediaURL(this.MediaURL)
 	return this
+}
+
+func (this *ProductMedia) ToProductMediaDTO() *product_dto.ProductMedia {
+	this.FixMediaURL()
+	return &product_dto.ProductMedia{
+		ID:        this.ID,
+		MediaType: this.MediaType,
+		MediaURL:  this.MediaURL,
+	}
 }

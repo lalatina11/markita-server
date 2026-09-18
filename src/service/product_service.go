@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/google/uuid"
 	"github.com/lalatina11/markita.git/src/config"
+	"github.com/lalatina11/markita.git/src/dto/product_dto"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/model"
 	"gorm.io/gorm"
@@ -31,7 +32,7 @@ func (this *ProductService) GetAllProducts() ([]model.Product, *service_error.Se
 	return products, nil
 }
 
-func (this *ProductService) CreateProduct(product *model.Product, user_id string) (*model.Product, *service_error.ServiceError) {
+func (this *ProductService) CreateProduct(product *model.Product, user_id string) (*product_dto.ProductWithRelations, *service_error.ServiceError) {
 	store, err := this.StoreService.Find(product.StoreID)
 	if err != nil {
 		return nil, service_error.Create(500, "Invalid store ID")
@@ -44,20 +45,14 @@ func (this *ProductService) CreateProduct(product *model.Product, user_id string
 	productId := uuid.NewString()
 	product.ID = productId
 
-	insertProductErr := this.Db.Create(product).Error
-
-	if insertProductErr != nil {
-		return nil, service_error.InternalServerError()
-	}
-
-	for i := 0; i < len(product.Media); i++ {
+	for i := range product.Media {
 		product.Media[i].ID = uuid.NewString()
 		product.Media[i].ProductID = product.ID
 	}
 
-	insertProductMediaErr := this.Db.Create(product.Media).Error
+	insertProductErr := this.Db.Create(product).Error
 
-	if insertProductMediaErr != nil {
+	if insertProductErr != nil {
 		return nil, service_error.InternalServerError()
 	}
 
@@ -70,7 +65,7 @@ func (this *ProductService) CreateProduct(product *model.Product, user_id string
 	return _product, nil
 }
 
-func (this *ProductService) Find(id string) (*model.Product, *service_error.ServiceError) {
+func (this *ProductService) Find(id string) (*product_dto.ProductWithRelations, *service_error.ServiceError) {
 	product := new(model.Product)
 	product.ID = id
 
@@ -80,9 +75,5 @@ func (this *ProductService) Find(id string) (*model.Product, *service_error.Serv
 		return nil, service_error.NotFound()
 	}
 
-	for i := 0; i < len(product.Media); i++ {
-		product.Media[i].FixMediaURL()
-	}
-
-	return product, nil
+	return product.ToProductDTO(), nil
 }
