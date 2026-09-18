@@ -23,7 +23,7 @@ func (this *User) ToUserWithStoreDTO() *auth_dto.UserWithStoresDto {
 	var stores = make([]auth_dto.UserStore, len(this.Stores))
 
 	for i, store := range this.Stores {
-		stores[i] = *store.ToUserStoreDTO()
+		stores[i] = *store.ToUserWithStoreDTO()
 	}
 
 	return &auth_dto.UserWithStoresDto{

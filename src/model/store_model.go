@@ -30,7 +30,7 @@ func (this *Store) FixMediaURL() *Store {
 	return this
 }
 
-func (this *Store) ToUserStoreDTO() *auth_dto.UserStore {
+func (this *Store) ToUserWithStoreDTO() *auth_dto.UserStore {
 	this.FixMediaURL()
 	return &auth_dto.UserStore{
 		ID:      this.ID,
