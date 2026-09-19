@@ -8,8 +8,8 @@ import (
 
 type CartModel struct {
 	ID        string         `json:"id" gorm:"primaryKey;index"`
-	UserID    string         `json:"user_id" gorm:"not null"`
-	ProductID string         `json:"product_id" gorm:"not null"`
+	UserID    string         `json:"user_id" gorm:"not null;index:uidx_cart_user_product,unique"`
+	ProductID string         `json:"product_id" gorm:"not null;index:uidx_cart_user_product,unique"`
 	Quantity  uint           `json:"quantity"`
 	CreatedAt time.Time      `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt time.Time      `json:"updated_at" gorm:"autoCreateTime;autoUpdateTime:milli"`
