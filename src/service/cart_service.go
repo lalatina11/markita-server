@@ -50,6 +50,16 @@ func (this *CartService) FindByProductIdAndUserId(productID string, userID strin
 func (this *CartService) AddToCart(cart *model.Cart, user_id string) (*cart_dto.CartDTO, *service_error.ServiceError) {
 	existingCart, _ := this.FindByProductIdAndUserId(cart.ProductID, user_id)
 
+	existingProduct, serviceErr := NewProductService().Find(cart.ProductID)
+
+	if serviceErr != nil {
+		return nil, service_error.Create(400, "Invalid Product")
+	}
+
+	if existingProduct.Store.OwnerID == user_id {
+		return nil, service_error.Create(400, "You can not add your product into your cart!")
+	}
+
 	if existingCart != nil {
 		existingCart.Quantity = existingCart.Quantity + cart.Quantity
 		if err := this.Db.Save(existingCart).Error; err != nil {
