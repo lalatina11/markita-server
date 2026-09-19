@@ -5,9 +5,10 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/logger"
 	"github.com/lalatina11/markita.git/src/handler"
 	"github.com/lalatina11/markita.git/src/middleware"
+	"gorm.io/gorm"
 )
 
-func AppRoutes(app *fiber.App) {
+func AppRoutes(app *fiber.App, db *gorm.DB) {
 	app.Use(logger.New(logger.Config{
 		Format: "# ${method} ${path} - ${status}\n",
 	}))
@@ -17,7 +18,7 @@ func AppRoutes(app *fiber.App) {
 	appHandler := handler.NewAppHandler()
 	app.Get("/", appHandler.Root)
 
-	ApiRoutes(app)
+	ApiRoutes(app, db)
 
 	// ← 404 handler must be LAST, after all routes
 	app.Use(middleware.NotFoundHandler())

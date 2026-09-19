@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/google/uuid"
-	"github.com/lalatina11/markita.git/src/config"
 	"github.com/lalatina11/markita.git/src/dto/cart_dto"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/model"
@@ -10,12 +9,13 @@ import (
 )
 
 type CartService struct {
-	Db *gorm.DB
+	Db             *gorm.DB
+	ProductService *ProductService
 }
 
-func NewCartSerice() *CartService {
-	Db := config.NewDatabaseConfig().Connect()
-	return &CartService{Db}
+func NewCartService(Db *gorm.DB) *CartService {
+	ProductService := NewProductService(Db)
+	return &CartService{Db, ProductService}
 }
 
 func (this *CartService) Find(id string) (*cart_dto.CartDTO, *service_error.ServiceError) {
@@ -50,7 +50,7 @@ func (this *CartService) FindByProductIdAndUserId(productID string, userID strin
 func (this *CartService) AddToCart(cart *model.Cart, user_id string) (*cart_dto.CartDTO, *service_error.ServiceError) {
 	existingCart, _ := this.FindByProductIdAndUserId(cart.ProductID, user_id)
 
-	existingProduct, serviceErr := NewProductService().Find(cart.ProductID)
+	existingProduct, serviceErr := this.ProductService.Find(cart.ProductID)
 
 	if serviceErr != nil {
 		return nil, service_error.Create(400, "Invalid Product")

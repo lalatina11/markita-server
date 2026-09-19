@@ -17,8 +17,7 @@ type UserService struct {
 	Db *gorm.DB
 }
 
-func NewUserService() *UserService {
-	Db := config.NewDatabaseConfig().Connect()
+func NewUserService(Db *gorm.DB) *UserService {
 	return &UserService{Db}
 }
 

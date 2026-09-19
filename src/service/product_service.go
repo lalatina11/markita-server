@@ -4,7 +4,6 @@ import (
 	"math"
 
 	"github.com/google/uuid"
-	"github.com/lalatina11/markita.git/src/config"
 	"github.com/lalatina11/markita.git/src/dto/product_dto"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/model"
@@ -16,9 +15,8 @@ type ProductService struct {
 	StoreService *StoreService
 }
 
-func NewProductService() *ProductService {
-	Db := config.NewDatabaseConfig().Connect()
-	StoreService := NewStoreService()
+func NewProductService(Db *gorm.DB) *ProductService {
+	StoreService := NewStoreService(Db)
 	return &ProductService{Db, StoreService}
 }
 

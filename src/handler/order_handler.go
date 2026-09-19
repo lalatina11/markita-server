@@ -11,8 +11,8 @@ type OrderHandler struct {
 	OrderService *service.OrderService
 }
 
-func NewOrderHandler() *OrderHandler {
-	return &OrderHandler{OrderService: service.NewOrderService()}
+func NewOrderHandler(OrderService *service.OrderService) *OrderHandler {
+	return &OrderHandler{OrderService}
 }
 
 func (this *OrderHandler) GetAllOrders(c fiber.Ctx) error {

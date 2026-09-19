@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/google/uuid"
-	"github.com/lalatina11/markita.git/src/config"
 	"github.com/lalatina11/markita.git/src/dto/order_dto"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/model"
@@ -13,8 +12,8 @@ type OrderService struct {
 	Db *gorm.DB
 }
 
-func NewOrderService() *OrderService {
-	return &OrderService{Db: config.NewDatabaseConfig().Connect()}
+func NewOrderService(Db *gorm.DB) *OrderService {
+	return &OrderService{Db}
 }
 
 func (this *OrderService) Find(id string) (*order_dto.OrderDTO, *service_error.ServiceError) {

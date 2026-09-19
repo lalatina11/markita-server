@@ -8,6 +8,7 @@ import (
 	"github.com/lalatina11/markita.git/src/lib/payload"
 	supabaseresponse "github.com/lalatina11/markita.git/src/lib/response/supabase_response"
 	"github.com/lalatina11/markita.git/src/lib/validator"
+	"gorm.io/gorm"
 )
 
 type AuthService struct {
@@ -15,9 +16,9 @@ type AuthService struct {
 	UserService     *UserService
 }
 
-func NewAuthService() *AuthService {
+func NewAuthService(Db *gorm.DB) *AuthService {
 	SupabaseService := NewSupabaseService()
-	UserService := NewUserService()
+	UserService := NewUserService(Db)
 	return &AuthService{SupabaseService, UserService}
 }
 

@@ -11,8 +11,7 @@ type CartHandler struct {
 	CartService *service.CartService
 }
 
-func NewCartHandler() *CartHandler {
-	CartService := service.NewCartSerice()
+func NewCartHandler(CartService *service.CartService) *CartHandler {
 	return &CartHandler{CartService}
 }
 

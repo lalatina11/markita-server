@@ -14,7 +14,7 @@ func App() *fiber.App {
 		BodyLimit: 500 * 1024 * 1024, // 500 MB
 	})
 
-	routes.AppRoutes(app)
+	routes.AppRoutes(app, db)
 
 	return app
 }

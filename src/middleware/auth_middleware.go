@@ -4,13 +4,15 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/service"
+	"gorm.io/gorm"
 )
 
-func AuthMiddleware() fiber.Handler {
+func AuthMiddleware(Db *gorm.DB) fiber.Handler {
+	authService := service.NewAuthService(Db)
 	return func(c fiber.Ctx) error {
 		token := c.Get(fiber.HeaderAuthorization)
 
-		user, err := service.NewAuthService().GetUser(token)
+		user, err := authService.GetUser(token)
 
 		if err != nil {
 			return service_error.Unauthorized().ToResponse(c)

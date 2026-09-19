@@ -4,16 +4,20 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/lalatina11/markita.git/src/handler"
 	"github.com/lalatina11/markita.git/src/middleware"
+	"github.com/lalatina11/markita.git/src/service"
+	"gorm.io/gorm"
 )
 
-func ProductRoutes(api fiber.Router) *fiber.Router {
+func ProductRoutes(api fiber.Router, Db *gorm.DB) *fiber.Router {
 	r := api.Group("/product")
-	handler := handler.NewProductHandler()
+
+	service := service.NewProductService(Db)
+	handler := handler.NewProductHandler(service)
 
 	r.Get("/", handler.GetAllProducts)
 	r.Get("/:id", handler.Find)
 
-	r.Post("/", middleware.AuthMiddleware(), handler.CreateProduct)
+	r.Post("/", middleware.AuthMiddleware(Db), handler.CreateProduct)
 
 	return &r
 

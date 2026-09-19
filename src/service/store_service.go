@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/google/uuid"
-	"github.com/lalatina11/markita.git/src/config"
 	"github.com/lalatina11/markita.git/src/dto/store_dto"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/model"
@@ -14,9 +13,8 @@ type StoreService struct {
 	UserService *UserService
 }
 
-func NewStoreService() *StoreService {
-	Db := config.NewDatabaseConfig().Connect()
-	UserService := NewUserService()
+func NewStoreService(Db *gorm.DB) *StoreService {
+	UserService := NewUserService(Db)
 	return &StoreService{Db, UserService}
 }
 
