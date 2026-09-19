@@ -22,6 +22,7 @@ func (this *OrderService) Direct(order *model.Order, userID string) (*model.Orde
 	order.UserID = userID
 
 	for i := range order.Items {
+		order.Items[i].ID = uuid.NewString()
 		order.Items[i].OrderID = orderId
 		order.Items[i].Status = "pending"
 	}
