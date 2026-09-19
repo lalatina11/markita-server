@@ -15,6 +15,7 @@ func ApiRoutes(app *fiber.App) *fiber.Router {
 	UploadRoutes(api)
 	StoreRoutes(api)
 	ProductRoutes(api)
+	CartRoutes(api)
 
 	return &api
 }

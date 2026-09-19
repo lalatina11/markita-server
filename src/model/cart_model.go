@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type CartModel struct {
+type Cart struct {
 	ID        string         `json:"id" gorm:"primaryKey;index"`
 	UserID    string         `json:"user_id" gorm:"not null;index:uidx_cart_user_product,unique"`
 	ProductID string         `json:"product_id" gorm:"not null;index:uidx_cart_user_product,unique"`
