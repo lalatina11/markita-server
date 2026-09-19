@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v3"
 	"github.com/lalatina11/markita.git/src/lib/response"
 	"github.com/lalatina11/markita.git/src/model"
@@ -17,12 +19,27 @@ func NewProductHandler() *ProductHandler {
 }
 
 func (this *ProductHandler) GetAllProducts(c fiber.Ctx) error {
-	products, err := this.ProductService.GetAllProducts()
-	if err != nil {
-		return err.ToResponse(c)
+	page, err := strconv.Atoi(c.Query("page", "1"))
+	if err != nil || page < 1 {
+		page = 1
 	}
 
-	return response.SuccessResponse(c, nil, products, nil)
+	perPageQuery := c.Query("perPage", "")
+	if perPageQuery == "" {
+		perPageQuery = c.Query("per_page", "25")
+	}
+
+	perPage, err := strconv.Atoi(perPageQuery)
+	if err != nil || perPage < 1 {
+		perPage = 25
+	}
+
+	paginatedProducts, serviceErr := this.ProductService.GetAllProducts(page, perPage)
+	if serviceErr != nil {
+		return serviceErr.ToResponse(c)
+	}
+
+	return response.SuccessResponse(c, nil, paginatedProducts, nil)
 }
 
 func (this *ProductHandler) CreateProduct(c fiber.Ctx) error {

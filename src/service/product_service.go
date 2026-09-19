@@ -1,6 +1,8 @@
 package service
 
 import (
+	"math"
+
 	"github.com/google/uuid"
 	"github.com/lalatina11/markita.git/src/config"
 	"github.com/lalatina11/markita.git/src/dto/product_dto"
@@ -20,22 +22,51 @@ func NewProductService() *ProductService {
 	return &ProductService{Db, StoreService}
 }
 
-func (this *ProductService) GetAllProducts() ([]product_dto.ProductWithRelations, *service_error.ServiceError) {
-	products := []model.Product{}
+func (this *ProductService) GetAllProducts(page int, perPage int) (*product_dto.PaginatedProductsDTO, *service_error.ServiceError) {
+	if page < 1 {
+		page = 1
+	}
+	if perPage < 1 {
+		perPage = 25
+	}
 
-	err := this.Db.Preload("Store").Preload("Media").Model(model.Product{}).Find(&products).Error
+	var total int64
+	err := this.Db.Model(&model.Product{}).Count(&total).Error
+	if err != nil {
+		return nil, service_error.InternalServerError()
+	}
+
+	offset := (page - 1) * perPage
+	totalPages := 0
+	if total > 0 {
+		totalPages = int(math.Ceil(float64(total) / float64(perPage)))
+	}
+
+	products := []model.Product{}
+	err = this.Db.
+		Preload("Store").
+		Preload("Media").
+		Offset(offset).
+		Limit(perPage).
+		Order("created_at DESC").
+		Find(&products).Error
 
 	if err != nil {
 		return nil, service_error.InternalServerError()
 	}
 
 	var _products = make([]product_dto.ProductWithRelations, len(products))
-
 	for i, product := range products {
 		_products[i] = *product.ToProductDTO()
 	}
 
-	return _products, nil
+	return &product_dto.PaginatedProductsDTO{
+		Products:   _products,
+		Page:       page,
+		PerPage:    perPage,
+		Total:      total,
+		TotalPages: totalPages,
+	}, nil
 }
 
 func (this *ProductService) CreateProduct(product *model.Product, user_id string) (*product_dto.ProductWithRelations, *service_error.ServiceError) {
