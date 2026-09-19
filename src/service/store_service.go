@@ -28,12 +28,6 @@ func (this *StoreService) CreateStore(store *model.Store, userId string) (*model
 		return nil, service_error.CreateServiceError(500, "Failed to create a store")
 	}
 
-	updateUserErr := this.UserService.UpdateRole(userId, "seller")
-
-	if updateUserErr != nil {
-		return nil, updateUserErr
-	}
-
 	return store, nil
 }
 
