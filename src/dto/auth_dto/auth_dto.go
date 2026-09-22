@@ -24,7 +24,7 @@ type UserAddress struct {
 	City         string    `json:"city"`
 	Regency      string    `json:"regency"`
 	Region       string    `json:"region"`
-	IsDefault    bool      `json:"is_default"`
+	IsPrimary    bool      `json:"is_primary"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 }
