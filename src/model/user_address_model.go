@@ -17,6 +17,7 @@ type UserAdress struct {
 	City         string         `json:"city" gorm:"not null"`
 	Regency      string         `json:"regency" gorm:"not null"`
 	Region       string         `json:"region" gorm:"not null"`
+	IsDefault    bool           `json:"is_default" gorm:"default:false"`
 	CreatedAt    time.Time      `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt    time.Time      `json:"updated_at" gorm:"autoCreateTime;autoUpdateTime:milli"`
 	DeletedAt    gorm.DeletedAt `json:"deleted_at" gorm:"index"`
@@ -34,6 +35,7 @@ func (this *UserAdress) ToUserAddressDTO() *auth_dto.UserAddress {
 		City:         this.City,
 		Regency:      this.Regency,
 		Region:       this.Region,
+		IsDefault:    this.IsDefault,
 		CreatedAt:    this.CreatedAt,
 		UpdatedAt:    this.UpdatedAt,
 	}
