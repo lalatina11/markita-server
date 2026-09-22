@@ -44,6 +44,7 @@ func (this *ProductService) GetAllProducts(page int, perPage int) (*product_dto.
 	err = this.Db.
 		Preload("Store").
 		Preload("Media").
+		Preload("Categories").
 		Offset(offset).
 		Limit(perPage).
 		Order("created_at DESC").
@@ -104,7 +105,11 @@ func (this *ProductService) Find(id string) (*product_dto.ProductWithRelations, 
 	product := new(model.Product)
 	product.ID = id
 
-	err := this.Db.Preload("Store").Preload("Media").First(product).Error
+	err := this.Db.
+		Preload("Store").
+		Preload("Media").
+		Preload("Categories").
+		First(product).Error
 
 	if err != nil {
 		return nil, service_error.NotFound()

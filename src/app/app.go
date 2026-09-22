@@ -9,7 +9,7 @@ import (
 
 func App() *fiber.App {
 	db := config.NewDatabaseConfig().Connect()
-	db.AutoMigrate(&model.User{}, &model.Store{}, &model.Product{}, &model.ProductMedia{}, &model.Cart{}, &model.Order{}, &model.OrderItem{})
+	db.AutoMigrate(&model.User{}, &model.Store{}, &model.Product{}, &model.ProductMedia{}, &model.Cart{}, &model.Order{}, &model.OrderItem{}, &model.UserAdress{}, &model.Category{})
 	app := fiber.New(fiber.Config{
 		BodyLimit: 500 * 1024 * 1024, // 500 MB
 	})

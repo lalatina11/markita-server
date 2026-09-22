@@ -23,9 +23,13 @@ type User struct {
 
 func (this *User) ToUserWithStoreDTO() *auth_dto.UserWithStoresDto {
 	var stores = make([]auth_dto.UserStore, len(this.Stores))
-
 	for i, store := range this.Stores {
 		stores[i] = *store.ToUserWithStoreDTO()
+	}
+
+	var addresses = make([]auth_dto.UserAddress, len(this.Addresses))
+	for i, address := range this.Addresses {
+		addresses[i] = *address.ToUserAddressDTO()
 	}
 
 	return &auth_dto.UserWithStoresDto{
@@ -37,6 +41,7 @@ func (this *User) ToUserWithStoreDTO() *auth_dto.UserWithStoresDto {
 		CreatedAt:   this.CreatedAt,
 		UpdatedAt:   this.UpdatedAt,
 		Stores:      stores,
+		Addresses:   addresses,
 	}
 }
 

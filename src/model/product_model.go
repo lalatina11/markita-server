@@ -26,6 +26,16 @@ func (this *Product) ToProductDTO() *product_dto.ProductWithRelations {
 	for i, m := range this.Media {
 		productMedia[i] = *m.ToProductMediaDTO()
 	}
+
+	var categories = make([]product_dto.ProductCategory, len(this.Categories))
+	for i, c := range this.Categories {
+		categories[i] = product_dto.ProductCategory{
+			ID:   c.ID,
+			Name: c.Name,
+			Slug: c.Slug,
+		}
+	}
+
 	return &product_dto.ProductWithRelations{
 		ID:          this.ID,
 		StoreID:     this.StoreID,
@@ -43,6 +53,7 @@ func (this *Product) ToProductDTO() *product_dto.ProductWithRelations {
 			Address: this.Store.Address,
 			City:    this.Store.City,
 		},
-		Media: productMedia,
+		Media:      productMedia,
+		Categories: categories,
 	}
 }

@@ -52,11 +52,25 @@ type OrderItemDTO struct {
 	Product        OrderProduct `json:"product"`
 }
 
+type OrderDestination struct {
+	ID           string `json:"id"`
+	UserID       string `json:"user_id"`
+	ReceiverName string `json:"receiver_name"`
+	Phone        string `json:"phone"`
+	Street       string `json:"street"`
+	Description  string `json:"description"`
+	City         string `json:"city"`
+	Regency      string `json:"regency"`
+	Region       string `json:"region"`
+}
+
 type OrderDTO struct {
-	ID        string         `json:"id"`
-	UserID    string         `json:"user_id"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	User      OrderUser      `json:"user"`
-	Items     []OrderItemDTO `json:"items"`
+	ID            string           `json:"id"`
+	UserID        string           `json:"user_id"`
+	DestinationID string           `json:"destination_id"`
+	Destination   OrderDestination `json:"destination"`
+	CreatedAt     time.Time        `json:"created_at"`
+	UpdatedAt     time.Time        `json:"updated_at"`
+	User          OrderUser        `json:"user"`
+	Items         []OrderItemDTO   `json:"items"`
 }

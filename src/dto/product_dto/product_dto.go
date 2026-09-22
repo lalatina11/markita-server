@@ -20,16 +20,23 @@ type ProductStore struct {
 	City    string `json:"city"`
 }
 
+type ProductCategory struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Slug string `json:"slug"`
+}
+
 type ProductWithRelations struct {
-	ID          string         `json:"id"`
-	StoreID     string         `json:"store_id"`
-	Name        string         `json:"name"`
-	Description string         `json:"description"`
-	Price       uint64         `json:"price"`
-	CreatedAt   time.Time      `json:"created_at"`
-	UpdatedAt   time.Time      `json:"updated_at"`
-	Store       ProductStore   `json:"store"`
-	Media       []ProductMedia `json:"media"`
+	ID          string            `json:"id"`
+	StoreID     string            `json:"store_id"`
+	Name        string            `json:"name"`
+	Description string            `json:"description"`
+	Price       uint64            `json:"price"`
+	CreatedAt   time.Time         `json:"created_at"`
+	UpdatedAt   time.Time         `json:"updated_at"`
+	Store       ProductStore      `json:"store"`
+	Media       []ProductMedia    `json:"media"`
+	Categories  []ProductCategory `json:"categories"`
 }
 
 type PaginatedProductsDTO struct {

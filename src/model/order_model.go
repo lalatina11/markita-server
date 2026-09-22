@@ -26,8 +26,20 @@ func (this *Order) ToOrderDTO() *order_dto.OrderDTO {
 	}
 
 	return &order_dto.OrderDTO{
-		ID:        this.ID,
-		UserID:    this.UserID,
+		ID:            this.ID,
+		UserID:        this.UserID,
+		DestinationID: this.AddressID,
+		Destination: order_dto.OrderDestination{
+			ID:           this.Destination.ID,
+			UserID:       this.Destination.UserID,
+			ReceiverName: this.Destination.ReceiverName,
+			Phone:        this.Destination.Phone,
+			Street:       this.Destination.Street,
+			Description:  this.Destination.Description,
+			City:         this.Destination.City,
+			Regency:      this.Destination.Regency,
+			Region:       this.Destination.Region,
+		},
 		CreatedAt: this.CreatedAt,
 		UpdatedAt: this.UpdatedAt,
 		User: order_dto.OrderUser{

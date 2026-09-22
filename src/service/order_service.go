@@ -22,6 +22,7 @@ func (this *OrderService) Find(id string) (*order_dto.OrderDTO, *service_error.S
 
 	err := this.Db.
 		Preload("User").
+		Preload("Destination").
 		Preload("Items").
 		Preload("Items.Product").
 		Preload("Items.Product.Store").
@@ -60,6 +61,7 @@ func (this *OrderService) GetAllOrders(userID string) ([]order_dto.OrderDTO, *se
 
 	err := this.Db.
 		Preload("User").
+		Preload("Destination").
 		Preload("Items").
 		Preload("Items.Product").
 		Preload("Items.Product.Store").

@@ -3,6 +3,7 @@ package model
 import (
 	"time"
 
+	"github.com/lalatina11/markita.git/src/dto/auth_dto"
 	"gorm.io/gorm"
 )
 
@@ -20,4 +21,20 @@ type UserAdress struct {
 	UpdatedAt    time.Time      `json:"updated_at" gorm:"autoCreateTime;autoUpdateTime:milli"`
 	DeletedAt    gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	User         User           `json:"user" gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
+}
+
+func (this *UserAdress) ToUserAddressDTO() *auth_dto.UserAddress {
+	return &auth_dto.UserAddress{
+		ID:           this.ID,
+		UserID:       this.UserID,
+		ReceiverName: this.ReceiverName,
+		Phone:        this.Phone,
+		Street:       this.Street,
+		Description:  this.Description,
+		City:         this.City,
+		Regency:      this.Regency,
+		Region:       this.Region,
+		CreatedAt:    this.CreatedAt,
+		UpdatedAt:    this.UpdatedAt,
+	}
 }
