@@ -15,7 +15,8 @@ type Order struct {
 	DeletedAt   gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	User        User           `json:"user" gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
 	Items       []OrderItem    `json:"items" gorm:"foreignKey:OrderID;references:ID;constraint:OnDelete:CASCADE"`
-	Destination UserAdress     `json:"destination"`
+	AddressID   string         `json:"destination_id" gorm:"not null"`
+	Destination UserAdress     `json:"destination" gorm:"foreignKey:AddressID;references:ID"`
 }
 
 func (this *Order) ToOrderDTO() *order_dto.OrderDTO {
