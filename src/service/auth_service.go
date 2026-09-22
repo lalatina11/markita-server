@@ -77,7 +77,7 @@ func (this *AuthService) SignIn(payload *payload.SignInPayload) (*supabaserespon
 	return nil, service_error.NewServiceError()
 }
 
-func (this *AuthService) GetUser(token string) (*auth_dto.UserWithStoresDto, *service_error.ServiceError) {
+func (this *AuthService) GetUser(token string) (*auth_dto.AuthUserDto, *service_error.ServiceError) {
 	var successResult supabaseresponse.AuthGetUserSuccessResponse
 	stringBody, err := this.SupabaseService.AuthGetUser(token)
 	if err != nil {

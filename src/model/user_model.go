@@ -18,10 +18,10 @@ type User struct {
 	UpdatedAt   time.Time      `json:"updated_at" gorm:"autoCreateTime;autoUpdateTime:milli"`
 	DeletedAt   gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	Stores      []Store        `json:"stores" gorm:"foreignKey:OwnerID;references:ID;constraint:OnDelete:CASCADE"`
-	Addresses   []UserAdress   `json:"addresses" gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
+	Addresses   []UserAddress  `json:"addresses" gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
 }
 
-func (this *User) ToUserWithStoreDTO() *auth_dto.UserWithStoresDto {
+func (this *User) ToUserWithStoreDTO() *auth_dto.AuthUserDto {
 	var stores = make([]auth_dto.UserStore, len(this.Stores))
 	for i, store := range this.Stores {
 		stores[i] = *store.ToUserWithStoreDTO()
@@ -32,7 +32,7 @@ func (this *User) ToUserWithStoreDTO() *auth_dto.UserWithStoresDto {
 		addresses[i] = *address.ToUserAddressDTO()
 	}
 
-	return &auth_dto.UserWithStoresDto{
+	return &auth_dto.AuthUserDto{
 		ID:          this.ID,
 		DisplayName: this.DisplayName,
 		Email:       this.Email,

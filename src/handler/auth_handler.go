@@ -53,7 +53,7 @@ func (this *AuthHandler) SignIn(c fiber.Ctx) error {
 }
 
 func (this *AuthHandler) GetUser(c fiber.Ctx) error {
-	user := fiber.Locals[*auth_dto.UserWithStoresDto](c, "user")
+	user := fiber.Locals[*auth_dto.AuthUserDto](c, "user")
 
 	return response.SuccessResponse(c, nil, user, nil)
 }

@@ -29,7 +29,7 @@ type UserAddress struct {
 	UpdatedAt    time.Time `json:"updated_at"`
 }
 
-type UserWithStoresDto struct {
+type AuthUserDto struct {
 	ID          string        `json:"id"`
 	DisplayName string        `json:"display_name"`
 	Email       string        `json:"email"`

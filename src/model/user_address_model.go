@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserAdress struct {
+type UserAddress struct {
 	ID           string         `json:"id" gorm:"primaryKey;index"`
 	UserID       string         `json:"user_id" gorm:"not null"`
 	ReceiverName string         `json:"receiver_name" gorm:"not null"`
@@ -24,7 +24,7 @@ type UserAdress struct {
 	User         User           `json:"user" gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
 }
 
-func (this *UserAdress) ToUserAddressDTO() *auth_dto.UserAddress {
+func (this *UserAddress) ToUserAddressDTO() *auth_dto.UserAddress {
 	return &auth_dto.UserAddress{
 		ID:           this.ID,
 		UserID:       this.UserID,
