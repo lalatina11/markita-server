@@ -18,6 +18,7 @@ type Product struct {
 	DeletedAt   gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 	Store       Store          `json:"store" gorm:"foreignKey:StoreID;references:ID;constraint:OnDelete:CASCADE"`
 	Media       []ProductMedia `json:"media" gorm:"foreignKey:ProductID;references:ID"`
+	Categories  []Category     `json:"categories" gorm:"many2many:product_categories"`
 }
 
 func (this *Product) ToProductDTO() *product_dto.ProductWithRelations {
