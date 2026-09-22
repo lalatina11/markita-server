@@ -17,7 +17,8 @@ type User struct {
 	CreatedAt   time.Time      `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt   time.Time      `json:"updated_at" gorm:"autoCreateTime;autoUpdateTime:milli"`
 	DeletedAt   gorm.DeletedAt `json:"deleted_at" gorm:"index"`
-	Stores      []Store        `json:"stores" gorm:"foreignKey:OwnerID;references:ID"`
+	Stores      []Store        `json:"stores" gorm:"foreignKey:OwnerID;references:ID;constraint:OnDelete:CASCADE"`
+	Addresses   []UserAdress   `json:"addresses" gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
 }
 
 func (this *User) ToUserWithStoreDTO() *auth_dto.UserWithStoresDto {
