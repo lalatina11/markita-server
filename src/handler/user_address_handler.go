@@ -22,6 +22,8 @@ func (this *UserAddressHandler) Create(c fiber.Ctx) error {
 	payload := new(model.UserAddress)
 
 	if err := c.Bind().Body(payload); err != nil {
+		msg = err.Error()
+		code = 422
 		return response.ErrorResponse(c, &msg, &code)
 	}
 

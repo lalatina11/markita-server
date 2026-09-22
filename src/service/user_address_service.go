@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/google/uuid"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/model"
 	"gorm.io/gorm"
@@ -28,6 +29,7 @@ func (this *UserAddressService) IsFirstAddress(UserID string) bool {
 }
 
 func (this *UserAddressService) Create(adress *model.UserAddress, UserID string) (*model.UserAddress, *service_error.ServiceError) {
+	adress.ID = uuid.NewString()
 	adress.UserID = UserID
 	isFirstAddress := this.IsFirstAddress(UserID)
 
