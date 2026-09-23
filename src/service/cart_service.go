@@ -38,7 +38,9 @@ func (this *CartService) Find(id string) (*cart_dto.CartDTO, *service_error.Serv
 
 func (this *CartService) FindByProductIdAndUserId(productID string, userID string) (*model.Cart, *service_error.ServiceError) {
 	cart := new(model.Cart)
-	err := this.Db.Where(&model.Cart{ProductID: productID, UserID: userID}).First(cart).Error
+	cart.ProductID = productID
+	cart.UserID = userID
+	err := this.Db.First(cart).Error
 
 	if err != nil {
 		return nil, service_error.NotFound()
