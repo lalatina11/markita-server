@@ -14,7 +14,7 @@ func ProductRoutes(api fiber.Router, Db *gorm.DB) *fiber.Router {
 	service := service.NewProductService(Db)
 	handler := handler.NewProductHandler(service)
 
-	r.Put("/product-category", middleware.AuthMiddleware(Db), handler.UpdateProductCategory)
+	r.Put("/product-category", middleware.AuthMiddleware(Db), handler.PutCategory)
 
 	r.Get("/", handler.GetAllProducts)
 	r.Post("/", middleware.AuthMiddleware(Db), handler.CreateProduct)

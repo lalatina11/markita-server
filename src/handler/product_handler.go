@@ -77,7 +77,7 @@ func (this *ProductHandler) Find(c fiber.Ctx) error {
 
 }
 
-func (this *ProductHandler) UpdateProductCategory(c fiber.Ctx) error {
+func (this *ProductHandler) PutCategory(c fiber.Ctx) error {
 	payload := new(payload.AssignCategoryProductPayload)
 	UserID := fiber.Locals[string](c, "user_id")
 
@@ -85,7 +85,7 @@ func (this *ProductHandler) UpdateProductCategory(c fiber.Ctx) error {
 		return service_error.Create(422, err.Error()).ToResponse(c)
 	}
 
-	updatedProduct, err := this.ProductService.AssignCategory(payload, UserID)
+	updatedProduct, err := this.ProductService.PutCategory(payload, UserID)
 
 	if err != nil {
 		return err.ToResponse(c)

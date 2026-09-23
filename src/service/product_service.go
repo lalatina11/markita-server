@@ -119,7 +119,7 @@ func (this *ProductService) Find(id string) (*product_dto.ProductWithRelations, 
 	return product.ToProductDTO(), nil
 }
 
-func (this *ProductService) AssignCategory(payload *payload.AssignCategoryProductPayload, UserID string) (*product_dto.ProductWithRelations, *service_error.ServiceError) {
+func (this *ProductService) PutCategory(payload *payload.AssignCategoryProductPayload, UserID string) (*product_dto.ProductWithRelations, *service_error.ServiceError) {
 
 	if len(payload.CategoryIDs) < 1 {
 		return nil, service_error.Create(422, "Please add some category")
@@ -128,7 +128,7 @@ func (this *ProductService) AssignCategory(payload *payload.AssignCategoryProduc
 	product := new(model.Product)
 	product.ID = payload.ProductID
 
-	err := this.Db.Preload("Store.Owner").First(product).Error
+	err := this.Db.Preload("Store").First(product).Error
 
 	if err != nil {
 		return nil, service_error.Create(404, "Invalid Product")
