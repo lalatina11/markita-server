@@ -18,15 +18,15 @@ func NewStoreService(Db *gorm.DB) *StoreService {
 	return &StoreService{Db, UserService}
 }
 
-func (this *StoreService) CreateStore(store *model.Store, userId string) (*model.Store, *service_error.ServiceError) {
+func (this *StoreService) CreateStore(store *model.Store, userId string) (*store_dto.StoreWithOwnerDTO, *service_error.ServiceError) {
 	store.ID = uuid.NewString()
 	store.OwnerID = userId
-	err := this.Db.Create(store).Error
+	err := this.Db.Create(store).Preload("Owner").First(store).Error
 	if err != nil {
 		return nil, service_error.CreateServiceError(500, "Failed to create a store")
 	}
 
-	return store, nil
+	return store.ToStoreDTO(), nil
 }
 
 func (this *StoreService) Find(id string) (*store_dto.StoreWithOwnerDTO, *service_error.ServiceError) {
