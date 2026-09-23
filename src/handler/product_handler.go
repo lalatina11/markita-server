@@ -4,6 +4,8 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v3"
+	"github.com/lalatina11/markita.git/src/error/service_error"
+	"github.com/lalatina11/markita.git/src/lib/payload"
 	"github.com/lalatina11/markita.git/src/lib/response"
 	"github.com/lalatina11/markita.git/src/model"
 	"github.com/lalatina11/markita.git/src/service"
@@ -73,4 +75,21 @@ func (this *ProductHandler) Find(c fiber.Ctx) error {
 
 	return response.SuccessResponse(c, nil, product, nil)
 
+}
+
+func (this *ProductHandler) UpdateProductCategory(c fiber.Ctx) error {
+	payload := new(payload.AssignCategoryProductPayload)
+	UserID := fiber.Locals[string](c, "user_id")
+
+	if err := c.Bind().Body(payload); err != nil {
+		return service_error.Create(422, err.Error()).ToResponse(c)
+	}
+
+	updatedProduct, err := this.ProductService.AssignCategory(payload, UserID)
+
+	if err != nil {
+		return err.ToResponse(c)
+	}
+
+	return response.SuccessResponse(c, nil, updatedProduct, nil)
 }

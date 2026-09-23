@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/lalatina11/markita.git/src/dto/product_dto"
 	"github.com/lalatina11/markita.git/src/error/service_error"
+	"github.com/lalatina11/markita.git/src/lib/payload"
 	"github.com/lalatina11/markita.git/src/model"
 	"gorm.io/gorm"
 )
@@ -116,4 +117,41 @@ func (this *ProductService) Find(id string) (*product_dto.ProductWithRelations, 
 	}
 
 	return product.ToProductDTO(), nil
+}
+
+func (this *ProductService) AssignCategory(payload *payload.AssignCategoryProductPayload, UserID string) (*product_dto.ProductWithRelations, *service_error.ServiceError) {
+
+	if len(payload.CategoryIDs) < 1 {
+		return nil, service_error.Create(422, "Please add some category")
+	}
+
+	product := new(model.Product)
+	product.ID = payload.ProductID
+
+	err := this.Db.Preload("Store.Owner").First(product).Error
+
+	if err != nil {
+		return nil, service_error.Create(404, "Invalid Product")
+	}
+
+	if product.Store.OwnerID != UserID {
+		return nil, service_error.Forbidden()
+	}
+
+	var categories []model.Category
+
+	if err := this.Db.Where("id IN ?", payload.CategoryIDs).Find(&categories).Error; err != nil {
+		return nil, service_error.InternalServerError()
+	}
+
+	if len(categories) != len(payload.CategoryIDs) {
+		return nil, service_error.Create(422, "One or more category are Invalid")
+	}
+
+	if err := this.Db.Model(product).Association("Categories").Replace(&categories); err != nil {
+		return nil, service_error.Create(500, "Failed to Update product category")
+	}
+
+	return this.Find(product.ID)
+
 }
