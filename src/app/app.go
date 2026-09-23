@@ -5,6 +5,7 @@ import (
 	"github.com/lalatina11/markita.git/src/config"
 	"github.com/lalatina11/markita.git/src/model"
 	"github.com/lalatina11/markita.git/src/routes"
+	"github.com/lalatina11/markita.git/src/service"
 )
 
 func App() *fiber.App {
@@ -13,6 +14,8 @@ func App() *fiber.App {
 	app := fiber.New(fiber.Config{
 		BodyLimit: 500 * 1024 * 1024, // 500 MB
 	})
+
+	service.NewCategoryService(db).RunSeeder()
 
 	routes.AppRoutes(app, db)
 
