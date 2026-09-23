@@ -47,3 +47,15 @@ func (this *CategoryService) RunSeeder() *service_error.ServiceError {
 
 	return nil
 }
+
+func (this *CategoryService) GetAll() ([]model.Category, *service_error.ServiceError) {
+	var categories []model.Category
+
+	err := this.Db.Find(&categories).Error
+
+	if err != nil {
+		return nil, service_error.InternalServerError()
+	}
+
+	return categories, nil
+}
