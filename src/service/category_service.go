@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/google/uuid"
+	"github.com/lalatina11/markita.git/src/dto/category_dto"
 	"github.com/lalatina11/markita.git/src/error/service_error"
 	"github.com/lalatina11/markita.git/src/model"
 	"github.com/lalatina11/markita.git/src/utils"
@@ -48,7 +49,7 @@ func (this *CategoryService) RunSeeder() *service_error.ServiceError {
 	return nil
 }
 
-func (this *CategoryService) GetAll() ([]model.Category, *service_error.ServiceError) {
+func (this *CategoryService) GetAll() ([]category_dto.CategoryDTO, *service_error.ServiceError) {
 	var categories []model.Category
 
 	err := this.Db.Find(&categories).Error
@@ -57,5 +58,11 @@ func (this *CategoryService) GetAll() ([]model.Category, *service_error.ServiceE
 		return nil, service_error.InternalServerError()
 	}
 
-	return categories, nil
+	dto := make([]category_dto.CategoryDTO, len(categories))
+
+	for i := range categories {
+		dto[i] = *categories[i].ToCategoryDTO()
+	}
+
+	return dto, nil
 }

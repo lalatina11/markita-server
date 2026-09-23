@@ -19,6 +19,7 @@ func ApiRoutes(app *fiber.App, Db *gorm.DB) *fiber.Router {
 	CartRoutes(api, Db)
 	OrderRoutes(api, Db)
 	UserAddressRoutes(api, Db)
+	CategoryRoutes(api, Db)
 
 	return &api
 }
